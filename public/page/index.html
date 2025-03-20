@@ -18,18 +18,6 @@
     <div class="dropdown-content pb-10 max-md:pb-4 w-full text-left">
       <form id="form" class="w-full card bg-base-100 shadow-xl">
         <div class="card-body gap-4 p-5">
-          <label class="control flex justify-between items-center gap-3">
-            <span class="control-label">
-              <svg viewBox="0 0 24 24" class="lucide"><use href="#icon-theme" /></svg>
-              <span data-text="10790BDE24A5"></span>
-            </span>
-            <select name="theme" class="select text-primary">
-              <option value="auto" data-text="DBC2203AB684" selected></option>
-              <option value="light" data-text="2EA7593D6E2A"></option>
-              <option value="dark" data-text="E8963232CDF0"></option>
-            </select>
-          </label>
-
           <label class="control flex justify-between gap-3">
             <span class="control-label">
               <svg viewBox="0 0 24 24" class="lucide"><use href="#icon-color" /></svg>
@@ -114,10 +102,12 @@
             <div class="collapse-content">
               <p class="mb-4" data-text="1A3297AE0050"></p>
 
-              <a id="shortcutLink" class="label link">
-                <span class="text-base-content" data-text="EDA934F9B769"></span>
-                <span id="tabShortcut" data-text="DDC7FCEF15FC"></span>
-              </a>
+              <label class="label">
+                <a href="#" id="shortcutLink" class="flex justify-between grow gap-3">
+                  <span class="" data-text="EDA934F9B769"></span>
+                  <span id="tabShortcut" data-text="DDC7FCEF15FC"></span>
+                </a>
+              </label>
 
               <label class="label">
                 <span data-text="BFB193D68D63"></span>
@@ -148,9 +138,6 @@
   <svg xmlns="http://www.w3.org/2000/svg" class="hidden">
     <symbol id="icon-settings" viewBox="0 0 24 24">
       <path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>
-    </symbol>
-    <symbol id="icon-theme" viewBox="0 0 24 24">
-      <path d="M12 8a2.83 2.83 0 0 0 4 4 4 4 0 1 1-4-4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.3 17.7-1.4 1.4"/><path d="m19.1 4.9-1.4 1.4"/>
     </symbol>
     <symbol id="icon-image" viewBox="0 0 24 24">
       <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>

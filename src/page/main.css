@@ -8,6 +8,7 @@
   --color-primary: #1c73e7;
   --color-secondary: #1c73e7;
   --color-neutral: #ced4da;
+  --color-neutral-content: #6a7282;
 
   name: light;
   default: true;
@@ -18,13 +19,15 @@
   --color-primary: #71b1ff;
   --color-secondary: #71b1ff;
   --color-neutral: #343a40;
+  --color-neutral-content: #99a1af;
 
   name: dark;
+  prefersdark: true;
   color-scheme: dark;
 }
 
 @utility text-ghost {
-  @apply text-gray-500;
+  @apply text-neutral-content;
 }
 
 @utility outline-none {
@@ -40,14 +43,6 @@
 }
 
 @layer {
-  .text-ghost {
-    @apply text-gray-500;
-  }
-
-  .link {
-    @apply text-gray-500 hover:text-primary cursor-pointer;
-  }
-
   .dropdown-toggle {
     @apply btn btn-md btn-info rounded-full mb-3 p-2 h-auto min-h-0 shadow-xl;
   }
@@ -69,7 +64,7 @@
   }
 
   .label {
-    @apply flex justify-between gap-3;
+    @apply flex justify-between gap-3 text-ghost;
   }
 
   label.control:focus-within {
@@ -93,7 +88,7 @@
   }
 
   .range-indicator {
-    @apply min-w-16 text-gray-500 text-right;
+    @apply min-w-16 text-ghost text-right;
   }
 
   .collapse {
@@ -117,7 +112,7 @@
   }
 
   .btn {
-    @apply btn-soft btn-xs rounded-sm cursor-pointer;
+    @apply btn-soft btn-xs rounded-sm;
   }
 
   .btn-xs {
@@ -125,11 +120,11 @@
   }
 
   .join {
-    @apply border border-primary mt-1 mb-6 w-full rounded-sm overflow-hidden;
+    @apply border border-primary mt-1 mb-6 w-full rounded-sm;
   }
 
   .join-item {
-    @apply btn btn-xs grow font-normal;
+    @apply btn btn-xs shadow-none grow font-normal;
   }
 
   .lucide {

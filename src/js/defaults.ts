@@ -18,7 +18,6 @@ export type Tab = typeof defaultTabSettings;
 
 export const defaultSettings = {
   dim: true,
-  theme: "auto",
   color: "",
   image: defaultImageSettings,
   tab: defaultTabSettings,

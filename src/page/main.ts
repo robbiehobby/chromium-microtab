@@ -4,8 +4,6 @@ const el = {
   form: document.getElementById("form") as HTMLFormElement,
   formToggle: document.getElementById("formToggle") as HTMLElement,
   formToggleDim: document.querySelector('input[name="formToggleDim"]') as HTMLInputElement,
-  theme: document.querySelector('select[name="theme"]') as HTMLSelectElement,
-  themeDefault: document.querySelector('option[value="auto"]') as HTMLOptionElement,
   color: document.querySelector('input[name="color"]') as HTMLInputElement,
   colorHex: document.getElementById("colorHex") as HTMLElement,
   imageSettings: document.getElementById("imageSettings") as HTMLElement,
@@ -37,7 +35,6 @@ function App() {
     const data = new FormData(el.form);
 
     settings.dim = el.formToggleDim.checked;
-    settings.theme = String(data.get("theme"));
     settings.color = colorChanged ? String(data.get("color")) : "";
     settings.image.data = imageData;
     settings.image.style = String(data.get("imageStyle"));
@@ -55,9 +52,8 @@ function App() {
 
   function setColor(color: string = "") {
     if (!color || !colorChanged) {
-      let { theme } = document.documentElement.dataset;
-      if (theme === "auto") theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-      el.color.value = theme === "dark" ? "#16191e" : "#e4e6e6";
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) el.color.value = "#16191e";
+      else el.color.value = "#e4e6e6";
       colorChanged = false;
     }
     document.documentElement.style.backgroundColor = colorChanged ? color : "";
@@ -144,10 +140,6 @@ function App() {
   function updateSettings(this: HTMLInputElement | void) {
     const data = new FormData(el.form);
 
-    let theme = String(data.get("theme"));
-    if (theme === "auto") theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    document.documentElement.dataset.theme = theme;
-
     if (this?.name === "color") colorChanged = true;
     if (this?.name === "imageData") imageChanged = true;
     if (!data.get("style")) data.set("style", "center");
@@ -219,7 +211,6 @@ chrome.storage.local.get(["settings"]).then((result) => {
     imageData = settings.image.data;
 
     el.formToggleDim.checked = settings.dim;
-    el.theme.value = settings.theme;
     if (settings.color) el.color.value = settings.color;
     el.imageSize.value = settings.image.size;
     el.imageOpacity.value = settings.image.opacity;
