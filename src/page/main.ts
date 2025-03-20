@@ -144,7 +144,9 @@ function App() {
   function updateSettings(this: HTMLInputElement | void) {
     const data = new FormData(el.form);
 
-    document.documentElement.dataset.theme = String(data.get("theme")) || "auto";
+    let theme = String(data.get("theme"));
+    if (theme === "auto") theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.dataset.theme = theme;
 
     if (this?.name === "color") colorChanged = true;
     if (this?.name === "imageData") imageChanged = true;

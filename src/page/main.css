@@ -1,20 +1,51 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base() {
-  label {
-    @apply block;
-  }
+@plugin "daisyui" {
+  include: button, card, collapse, dropdown, join, range, select, toggle;
 }
 
-@layer components {
+@plugin "daisyui/theme" {
+  --color-primary: #1c73e7;
+  --color-secondary: #1c73e7;
+  --color-neutral: #ced4da;
+
+  name: light;
+  default: true;
+  color-scheme: light;
+}
+
+@plugin "daisyui/theme" {
+  --color-primary: #71b1ff;
+  --color-secondary: #71b1ff;
+  --color-neutral: #343a40;
+
+  name: dark;
+  color-scheme: dark;
+}
+
+@utility text-ghost {
+  @apply text-gray-500;
+}
+
+@utility outline-none {
+  outline: none !important;
+}
+
+@utility stroke-linecap {
+  stroke-linecap: round;
+}
+
+@utility stroke-linejoin {
+  stroke-linejoin: round;
+}
+
+@layer {
   .text-ghost {
     @apply text-gray-500;
   }
 
   .link {
-    @apply no-underline text-gray-500 hover:text-primary;
+    @apply text-gray-500 hover:text-primary cursor-pointer;
   }
 
   .dropdown-toggle {
@@ -38,7 +69,7 @@
   }
 
   .label {
-    @apply gap-3;
+    @apply flex justify-between gap-3;
   }
 
   label.control:focus-within {
@@ -46,7 +77,7 @@
   }
 
   .select {
-    @apply select-xs bg-none bg-transparent h-auto min-h-0 p-0 w-full text-sm text-right border-0 focus:outline-none;
+    @apply bg-none bg-transparent h-auto min-h-0 p-0 w-full text-sm text-right border-0 shadow-none focus:outline-none;
   }
 
   .toggle {
@@ -54,7 +85,7 @@
   }
 
   .range {
-    @apply range-xs range-primary;
+    @apply range-xs range-primary w-full;
   }
 
   .range-label {
@@ -74,7 +105,7 @@
   }
 
   .collapse-content {
-    @apply !py-0 px-4 text-sm leading-relaxed;
+    @apply px-4 !py-0 text-sm leading-relaxed;
   }
 
   .collapse-content .label {
@@ -86,7 +117,7 @@
   }
 
   .btn {
-    @apply btn-xs rounded-sm cursor-pointer;
+    @apply btn-soft btn-xs rounded-sm cursor-pointer;
   }
 
   .btn-xs {
@@ -94,7 +125,7 @@
   }
 
   .join {
-    @apply border border-primary mt-1 mb-6 w-full rounded-sm;
+    @apply border border-primary mt-1 mb-6 w-full rounded-sm overflow-hidden;
   }
 
   .join-item {
@@ -107,19 +138,5 @@
 
   .lucide-sm {
     @apply w-3 h-3;
-  }
-}
-
-@layer utilities {
-  .outline-none {
-    outline: none !important;
-  }
-
-  .stroke-linecap {
-    stroke-linecap: round;
-  }
-
-  .stroke-linejoin {
-    stroke-linejoin: round;
   }
 }
