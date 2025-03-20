@@ -5,6 +5,3 @@ Thanks to <a href="https://lucide.dev/">Lucide</a> for providing the icons and <
 
 ![](/metadata/tabber-1.png)
 ![](/metadata/tabber-2.png)
-![](/metadata/tabber-3.png)
-![](/metadata/tabber-4.png)
-![](/metadata/tabber-5.png)
