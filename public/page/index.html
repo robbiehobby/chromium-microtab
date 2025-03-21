@@ -12,121 +12,107 @@
   <details class="dropdown w-full max-w-lg text-right">
     <summary id="formToggle" class="dropdown-toggle">
       <svg viewBox="0 0 24 24" class="lucide"><use href="#icon-settings" /></svg>
-      <span class="sr-only" data-text="3FE34C1E4082"></span>
+      <span class="sr-only" data-text="settings"></span>
     </summary>
 
     <div class="dropdown-content pb-10 max-md:pb-4 w-full text-left">
       <form id="form" class="w-full card bg-base-100 shadow-xl">
         <div class="card-body gap-4 p-5">
-          <label class="control flex justify-between gap-3">
+          <label class="control border focus-outline flex justify-between gap-3">
             <span class="control-label">
               <svg viewBox="0 0 24 24" class="lucide"><use href="#icon-color" /></svg>
-              <span data-text="F3E3EBFBB7EF"></span>
+              <span data-text="bgColor"></span>
             </span>
-            <span id="colorHex" data-text="AC16E85FC79F" class="text-primary"></span>
+            <span id="colorHex" class="text-primary" data-text="bgColorChoose"></span>
             <input type="color" name="color" class="sr-only" />
           </label>
 
-          <div class="control py-0 text-xs">
+          <div class="control border focus-outline py-0 text-xs">
             <label class="relative">
               <input type="file" name="imageData" accept="image/*" class="sr-only" />
-              <span class="control !p-0 flex justify-between gap-3 border-none">
+              <span class="control !p-0 flex justify-between gap-3">
                 <span class="control-label">
                   <svg viewBox="0 0 24 24" class="lucide"><use href="#icon-image" /></svg>
-                  <span data-text="2A7A2B97CE83"></span>
+                  <span data-text="bgImage"></span>
                 </span>
-                <span id="imageChoose" data-text="E7740714E146"></span>
-                <button type="button" id="imageRemove" data-text="81D6B4A14E56" class="btn btn-error hidden"></button>
+                <span id="imageChoose" class="text-primary" data-text="bgImageChoose"></span>
+                <button type="button" id="imageRemove" data-text="bgImageRemove" class="btn btn-xs btn-error !h-auto hidden"></button>
               </span>
             </label>
           </div>
 
-          <section id="imageSettings" aria-label="F8E60B5329E3" class="control text-xs">
+          <section id="imageSettings" aria-label="bgImage" class="control border focus-outline text-xs">
             <div class="join">
-              <input type="radio" name="imageStyle" value="center" aria-label="2BE9520628EF" checked class="join-item" />
-              <input type="radio" name="imageStyle" value="cover" aria-label="8EAD7FBEF648" class="join-item" />
-              <input type="radio" name="imageStyle" value="repeat" aria-label="19FB15193610" class="join-item" />
+              <input type="radio" name="imageStyle" value="center" aria-label="bgImageCenter" checked class="join-item" />
+              <input type="radio" name="imageStyle" value="cover" aria-label="bgImageCover" class="join-item" />
+              <input type="radio" name="imageStyle" value="repeat" aria-label="bgImageRepeat" class="join-item" />
             </div>
 
             <label>
               <span class="range-label">
-                <span data-text="D1EEA69A2DF4"></span>
-                <span class="range-indicator" data-text="F091C7551507"></span>
+                <span data-text="bgImageSize"></span>
+                <span class="range-indicator" data-text="max"></span>
               </span>
               <input type="range" name="imageSize" min="0" max="200" step="0.025" value="100" class="range mb-4" />
             </label>
 
             <label>
               <span class="range-label">
-                <span data-text="8B1860453CA0"></span>
-                <span class="range-indicator" data-text="F091C7551507"></span>
+                <span data-text="bgImageOpacity"></span>
+                <span class="range-indicator" data-text="max"></span>
               </span>
               <input type="range" name="imageOpacity" min="0" max="100" step="0.025" value="100" class="range mb-4" />
             </label>
 
             <label>
               <span class="range-label">
-                <span data-text="D65DEDBFAE74"></span>
-                <span class="range-indicator" data-text="F091C7551507"></span>
-              </span>
-              <input type="range" name="imageContrast" min="0" max="1" step="0.025" value="1" class="range mb-4" />
-            </label>
-
-            <label>
-              <span class="range-label">
-                <span data-text="4582989714DC"></span>
-                <span class="range-indicator" data-text="F091C7551507"></span>
+                <span data-text="bgImageHue"></span>
+                <span class="range-indicator" data-text="max"></span>
               </span>
               <input type="range" name="imageHue" min="0" max="360" step="0.025" value="0" class="range mb-4" />
             </label>
 
             <label>
               <span class="range-label">
-                <span data-text="5420E715F807"></span>
-                <span class="range-indicator" data-text="F091C7551507"></span>
+                <span data-text="bgImageGrayscale"></span>
+                <span class="range-indicator" data-text="max"></span>
               </span>
               <input type="range" name="imageGrayscale" min="0" max="1" step="0.025" value="0" class="range mb-4" />
             </label>
 
             <label>
               <span class="range-label">
-                <span data-text="BB167B4D620A"></span>
-                <span class="range-indicator" data-text="F091C7551507"></span>
+                <span data-text="bgImageBlur"></span>
+                <span class="range-indicator" data-text="max"></span>
               </span>
               <input type="range" name="imageBlur" min="0" max="50" step="0.025" value="0" class="range" />
             </label>
           </section>
 
-          <details class="collapse outline-none">
-            <summary class="collapse-title" data-text="16A2FD8A2DC5"></summary>
+          <details class="collapse border focus-outline">
+            <summary class="collapse-title" data-text="moreSettings"></summary>
             <div class="collapse-content">
-              <p class="mb-4" data-text="1A3297AE0050"></p>
+              <p class="mb-4" data-text="closeTabDescription"></p>
 
-              <label class="label">
+              <label class="label border-t">
                 <a href="#" id="shortcutLink" class="flex justify-between grow gap-3">
-                  <span class="" data-text="EDA934F9B769"></span>
-                  <span id="tabShortcut" data-text="DDC7FCEF15FC"></span>
+                  <span class="" data-text="closeTab"></span>
+                  <span id="tabShortcut" data-text="notConfigured"></span>
                 </a>
               </label>
 
-              <label class="label">
-                <span data-text="BFB193D68D63"></span>
+              <label class="label border-t">
+                <span data-text="closePinnedTabs"></span>
                 <input type="checkbox" name="tabProtectPinned" class="toggle" />
               </label>
 
-              <label class="label">
-                <span data-text="19091FBBCABC"></span>
+              <label class="label border-t">
+                <span data-text="closeGroupedTabs"></span>
                 <input type="checkbox" name="tabProtectGroups" class="toggle" />
               </label>
 
-              <label class="label">
-                <span data-text="29D8356565D5"></span>
-                <input type="checkbox" name="formToggleDim" class="toggle" checked />
-              </label>
-
-              <div class="label">
-                <span data-text="D65F9B43AB64"></span>
-                <button type="button" id="reset" class="btn btn-warning" data-text="844EEF857F59"></button>
+              <div class="label border-t">
+                <button type="button" id="reset" class="btn btn-sm btn-warning grow" data-text="bgColorReset"></button>
               </div>
             </div>
           </details>
@@ -134,6 +120,9 @@
       </form>
     </div>
   </details>
+
+  <script type="module" src="i18n.js"></script>
+  <script type="module" src="main.js"></script>
 
   <svg xmlns="http://www.w3.org/2000/svg" class="hidden">
     <symbol id="icon-settings" viewBox="0 0 24 24">
@@ -146,8 +135,5 @@
       <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
     </symbol>
   </svg>
-
-  <script type="module" src="i18n.js"></script>
-  <script type="module" src="main.js"></script>
 </body>
 </html>

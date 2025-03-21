@@ -3,7 +3,6 @@ export const defaultImageSettings = {
   style: "cover",
   size: "100",
   opacity: "100",
-  contrast: "1",
   hue: "0",
   grayscale: "0",
   blur: "0",
@@ -17,7 +16,6 @@ export const defaultTabSettings = {
 export type Tab = typeof defaultTabSettings;
 
 export const defaultSettings = {
-  dim: true,
   color: "",
   image: defaultImageSettings,
   tab: defaultTabSettings,

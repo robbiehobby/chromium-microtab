@@ -3,7 +3,6 @@ import { defaultImageSettings, defaultSettings, Image, Settings } from "../js/de
 const el = {
   form: document.getElementById("form") as HTMLFormElement,
   formToggle: document.getElementById("formToggle") as HTMLElement,
-  formToggleDim: document.querySelector('input[name="formToggleDim"]') as HTMLInputElement,
   color: document.querySelector('input[name="color"]') as HTMLInputElement,
   colorHex: document.getElementById("colorHex") as HTMLElement,
   imageSettings: document.getElementById("imageSettings") as HTMLElement,
@@ -11,7 +10,6 @@ const el = {
   imageData: document.querySelector('input[name="imageData"]') as HTMLInputElement,
   imageSize: document.querySelector('input[name="imageSize"]') as HTMLInputElement,
   imageOpacity: document.querySelector('input[name="imageOpacity"]') as HTMLInputElement,
-  imageContrast: document.querySelector('input[name="imageContrast"]') as HTMLInputElement,
   imageHue: document.querySelector('input[name="imageHue"]') as HTMLInputElement,
   imageGrayscale: document.querySelector('input[name="imageGrayscale"]') as HTMLInputElement,
   imageBlur: document.querySelector('input[name="imageBlur"]') as HTMLInputElement,
@@ -34,13 +32,11 @@ function App() {
     const settings = structuredClone(defaultSettings);
     const data = new FormData(el.form);
 
-    settings.dim = el.formToggleDim.checked;
     settings.color = colorChanged ? String(data.get("color")) : "";
     settings.image.data = imageData;
     settings.image.style = String(data.get("imageStyle"));
     settings.image.size = String(data.get("imageSize"));
     settings.image.opacity = String(data.get("imageOpacity"));
-    settings.image.contrast = String(data.get("imageContrast"));
     settings.image.hue = String(data.get("imageHue"));
     settings.image.grayscale = String(data.get("imageGrayscale"));
     settings.image.blur = String(data.get("imageBlur"));
@@ -58,7 +54,7 @@ function App() {
     }
     document.documentElement.style.backgroundColor = colorChanged ? color : "";
     if (colorChanged) el.colorHex.innerText = color;
-    else el.colorHex.innerText = chrome.i18n.getMessage("AC16E85FC79F");
+    else el.colorHex.innerText = chrome.i18n.getMessage("bgColorChoose");
   }
 
   function toggleImageSettings() {
@@ -96,7 +92,7 @@ function App() {
       imageChanged = false;
       if (image.size === 0) return;
       if (image.size > 8000000) {
-        alert(chrome.i18n.getMessage("C0424E559A00"));
+        alert(chrome.i18n.getMessage("bgImageTooLarge"));
         return;
       }
 
@@ -113,13 +109,17 @@ function App() {
   }
 
   function setImageStyle(props: Image = structuredClone(defaultImageSettings)) {
-    if (props.style === "cover") el.imageOverlay.style.backgroundSize = props.style;
-    else el.imageOverlay.style.backgroundSize = `${props.size}%`;
+    if (props.style === "cover") {
+      el.imageSize.disabled = true;
+      el.imageOverlay.style.backgroundSize = props.style;
+    } else {
+      el.imageSize.disabled = false;
+      el.imageOverlay.style.backgroundSize = `${props.size}%`;
+    }
     el.imageOverlay.style.backgroundRepeat = props.style === "repeat" ? "repeat" : "";
     el.imageOverlay.style.opacity = `${props.opacity}%`;
 
     const styles = [];
-    if (props.contrast) styles.push(`contrast(${props.contrast})`);
     if (props.hue) styles.push(`hue-rotate(${props.hue}deg)`);
     if (props.grayscale) styles.push(`grayscale(${props.grayscale})`);
     if (props.blur) styles.push(`blur(${props.blur}px)`);
@@ -127,7 +127,6 @@ function App() {
     el.imageOverlay.style.filter = styles.length ? styles.join(" ") : "";
     el.imageSize.value = props.size;
     el.imageOpacity.value = props.opacity;
-    el.imageContrast.value = props.contrast;
     el.imageHue.value = props.hue;
     el.imageGrayscale.value = props.grayscale;
     el.imageBlur.value = props.blur;
@@ -149,16 +148,12 @@ function App() {
     setImageStyle({
       data: imageData,
       style: String(data.get("imageStyle")),
-      size: String(data.get("imageSize")),
+      size: String(el.imageSize.value),
       opacity: String(data.get("imageOpacity")),
-      contrast: String(data.get("imageContrast")),
       hue: String(data.get("imageHue")),
       grayscale: String(data.get("imageGrayscale")),
       blur: String(data.get("imageBlur")),
     });
-
-    if (el.formToggleDim.checked) el.formToggle.classList.add("dim");
-    else el.formToggle.classList.remove("dim");
 
     // Helps prevent excessive style resetting.
     started = true;
@@ -180,7 +175,7 @@ function App() {
     el.tabShortcut.innerText = command[0].shortcut.split("").join(" ");
   });
 
-  // Restore the default background color or image settings.
+  // Reset the default background color or image settings.
   function resetSettings(type: string | null = null) {
     if (type === "color") setColor();
     else if (type === "image") {
@@ -191,10 +186,10 @@ function App() {
   }
 
   el.imageRemove.addEventListener("click", () => {
-    if (window.confirm(chrome.i18n.getMessage("79D0EF9D2054"))) resetSettings("image");
+    if (window.confirm(chrome.i18n.getMessage("bgImageRemoveConfirm"))) resetSettings("image");
   });
   el.reset.addEventListener("click", () => {
-    if (window.confirm(chrome.i18n.getMessage("5EC0C7595A59"))) resetSettings("color");
+    if (window.confirm(chrome.i18n.getMessage("bgColorResetConfirm"))) resetSettings("color");
   });
 
   // Set initial settings.
@@ -210,11 +205,9 @@ chrome.storage.local.get(["settings"]).then((result) => {
     colorChanged = !!settings.color;
     imageData = settings.image.data;
 
-    el.formToggleDim.checked = settings.dim;
     if (settings.color) el.color.value = settings.color;
     el.imageSize.value = settings.image.size;
     el.imageOpacity.value = settings.image.opacity;
-    el.imageContrast.value = settings.image.contrast;
     el.imageHue.value = settings.image.hue;
     el.imageGrayscale.value = settings.image.grayscale;
     el.imageBlur.value = settings.image.blur;

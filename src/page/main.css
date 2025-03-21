@@ -7,8 +7,6 @@
 @plugin "daisyui/theme" {
   --color-primary: #1c73e7;
   --color-secondary: #1c73e7;
-  --color-neutral: #ced4da;
-  --color-neutral-content: #6a7282;
 
   name: light;
   default: true;
@@ -18,20 +16,10 @@
 @plugin "daisyui/theme" {
   --color-primary: #71b1ff;
   --color-secondary: #71b1ff;
-  --color-neutral: #343a40;
-  --color-neutral-content: #99a1af;
 
   name: dark;
   prefersdark: true;
   color-scheme: dark;
-}
-
-@utility text-ghost {
-  @apply text-neutral-content;
-}
-
-@utility outline-none {
-  outline: none !important;
 }
 
 @utility stroke-linecap {
@@ -43,36 +31,36 @@
 }
 
 @layer {
+  :is(.border, .border-t) {
+    @apply border-base-content/5;
+  }
+
   .dropdown-toggle {
-    @apply btn btn-md btn-info rounded-full mb-3 p-2 h-auto min-h-0 shadow-xl;
+    @apply btn btn-md btn-info rounded-full mb-3 p-2 h-auto min-h-0 shadow-xl grayscale opacity-40;
   }
 
-  .dropdown-toggle.dim {
-    @apply grayscale opacity-40;
-  }
-
-  :is(.dropdown-toggle.dim:hover, details[open] .dropdown-toggle.dim) {
+  :is(.dropdown-toggle:hover, details[open] .dropdown-toggle) {
     @apply grayscale-0 opacity-100;
   }
 
   .control {
-    @apply p-4 border border-neutral rounded-md transition text-sm text-ghost;
+    @apply p-4 rounded-md transition text-sm;
   }
 
   .control-label {
-    @apply flex items-center gap-2 text-base-content;
+    @apply flex items-center gap-2;
   }
 
   .label {
-    @apply flex justify-between gap-3 text-ghost;
+    @apply flex justify-between gap-3;
   }
 
-  label.control:focus-within {
+  .focus-outline:has(:focus-visible) {
     @apply border-primary;
   }
 
   .select {
-    @apply bg-none bg-transparent h-auto min-h-0 p-0 w-full text-sm text-right border-0 shadow-none focus:outline-none;
+    @apply bg-none bg-transparent h-auto min-h-0 p-0 w-full text-sm text-right border-0 shadow-none;
   }
 
   .toggle {
@@ -84,19 +72,15 @@
   }
 
   .range-label {
-    @apply flex w-full justify-between items-center mb-2 text-base-content font-medium;
+    @apply flex w-full justify-between items-center mb-2 text-xs font-medium;
   }
 
   .range-indicator {
-    @apply min-w-16 text-ghost text-right;
-  }
-
-  .collapse {
-    @apply border border-neutral rounded-md;
+    @apply min-w-16 text-right opacity-60;
   }
 
   .collapse-title {
-    @apply p-4 min-h-0 text-sm text-ghost;
+    @apply p-4 min-h-0 text-sm text-secondary;
   }
 
   .collapse-content {
@@ -104,15 +88,11 @@
   }
 
   .collapse-content .label {
-    @apply border-t border-neutral -mx-4 p-4;
-  }
-
-  details .collapse[open] .collapse-title {
-    @apply text-secondary;
+    @apply -mx-4 p-4;
   }
 
   .btn {
-    @apply btn-soft btn-xs rounded-sm;
+    @apply btn-soft;
   }
 
   .btn-xs {
@@ -120,11 +100,11 @@
   }
 
   .join {
-    @apply border border-primary mt-1 mb-6 w-full rounded-sm;
+    @apply border border-primary mt-1 mb-6 w-full;
   }
 
   .join-item {
-    @apply btn btn-xs shadow-none grow font-normal;
+    @apply btn btn-xs shadow-none grow font-normal rounded-none;
   }
 
   .lucide {

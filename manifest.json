@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/chrome-manifest.json",
   "manifest_version": 3,
-  "name": "__MSG_BF2A362F7642__",
-  "description": "__MSG_8257DA041610__",
+  "name": "__MSG_name__",
+  "description": "__MSG_description__",
   "background": {
     "service_worker": "public/js/background.js"
   },
@@ -11,7 +11,7 @@
   },
   "commands": {
     "close-tab": {
-      "description": "__MSG_C4E6C13D69EB__"
+      "description": "__MSG_commandName__"
     }
   },
   "content_security_policy": {
