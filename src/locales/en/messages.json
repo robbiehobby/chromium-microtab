@@ -3,7 +3,7 @@
     "message": "Tabular"
   },
   "description": {
-    "message": "A customizable empty new tab page and a last and group tab aware close tab shortcut."
+    "message": "A Chromium extension designed to customize the empty new tab page."
   },
   "commandName": {
     "message": "Close Tab"
