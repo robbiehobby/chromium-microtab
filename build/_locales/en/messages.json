@@ -1,0 +1,62 @@
+{
+  "name": {
+    "message": "Tabular"
+  },
+  "description": {
+    "message": "A customizable empty new tab page and a last and group tab aware close tab shortcut."
+  },
+  "commandName": {
+    "message": "Close Tab"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "color": {
+    "message": "Background Color"
+  },
+  "image": {
+    "message": "Backround Image"
+  },
+  "imageRemove": {
+    "message": "Remove Background Image"
+  },
+  "imageStyleCover": {
+    "message": "Cover"
+  },
+  "imageStyleRepeat": {
+    "message": "Repeat"
+  },
+  "imageStyleCenter": {
+    "message": "Center"
+  },
+  "imageSize": {
+    "message": "Size"
+  },
+  "imageOpacity": {
+    "message": "Opacity"
+  },
+  "imageHue": {
+    "message": "Hue"
+  },
+  "imageGrayscale": {
+    "message": "Grayscale"
+  },
+  "imageBlur": {
+    "message": "Blur"
+  },
+  "closeTabDescription": {
+    "message": "Tired of accidentally closing tabs or the browser window when closing the last tab? Configure the alternative Close Tab shortcut to avoid this frustration."
+  },
+  "closeTabPinned": {
+    "message": "Prevent closing pinned tabs"
+  },
+  "closeTabGrouped": {
+    "message": "Prevent closing tabs within groups"
+  },
+  "closeTabShortcut": {
+    "message": "Configure Keyboard Shortcuts"
+  }
+}
