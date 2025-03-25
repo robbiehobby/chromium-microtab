@@ -1,9 +1,8 @@
 import { Image } from "lucide-react";
 import { Box, CloseButton, FileUpload, Input, InputGroup, VisuallyHidden } from "@chakra-ui/react";
-import { FormProps } from "../bundle.ts";
 import getMessage from "../../../app/i18n.ts";
 
-interface FileUploadProps extends FileUpload.RootProps, FormProps {
+interface FileUploadProps extends FileUpload.RootProps {
   label: string;
   defaultValue?: string;
   onFileRemove: Function;

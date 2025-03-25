@@ -1,7 +1,6 @@
 import { SegmentGroup } from "@chakra-ui/react";
-import { FormProps } from "../bundle.ts";
 
-interface SegmentGroupProps extends SegmentGroup.RootProps, FormProps {
+interface SegmentGroupProps extends SegmentGroup.RootProps {
   items: { [key: string]: string };
 }
 

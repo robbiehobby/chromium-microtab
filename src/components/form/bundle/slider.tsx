@@ -1,7 +1,6 @@
 import { HStack, Slider } from "@chakra-ui/react";
-import { FormProps } from "../bundle.ts";
 
-interface SliderProps extends Slider.RootProps, FormProps {
+interface SliderProps extends Slider.RootProps {
   label: string;
   min: number;
   max: number;

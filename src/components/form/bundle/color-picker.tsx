@@ -1,9 +1,8 @@
 import { Palette } from "lucide-react";
 import { ColorPicker, HStack, Portal, VisuallyHidden, Box } from "@chakra-ui/react";
-import { FormProps } from "../bundle.ts";
 import color from "../../ui/color.ts";
 
-interface ColorPickerProps extends ColorPicker.RootProps, FormProps {
+interface ColorPickerProps extends ColorPicker.RootProps {
   label: string;
 }
 

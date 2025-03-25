@@ -28,7 +28,7 @@ export default function Page() {
 
       if (!loaded) {
         const settings = await getSettings();
-        if (settings) setValues(settings as typeof defaultValues);
+        if (Object.keys(settings).length) setValues(settings as typeof defaultValues);
         setLoaded(true);
       }
 
@@ -90,7 +90,7 @@ export default function Page() {
               <form>
                 <Form.ColorPicker
                   label={getMessage("color")}
-                  defaultValue={values.color ? parseColor(values.color) : undefined}
+                  value={values.color ? parseColor(values.color) : undefined}
                   onValueChange={(details) => pageHandler.color(details, state)}
                   mb={4}
                 />
@@ -115,7 +115,7 @@ export default function Page() {
                         repeat: getMessage("imageStyleRepeat"),
                         center: getMessage("imageStyleCenter"),
                       }}
-                      defaultValue={values.imageStyle}
+                      value={values.imageStyle}
                       onValueChange={(details) => pageHandler.imageStyle(details, state)}
                       mb="4"
                     />
@@ -126,7 +126,7 @@ export default function Page() {
                         max={200}
                         step={0.5}
                         unit="%"
-                        defaultValue={[values.imageSize]}
+                        value={[values.imageSize]}
                         onValueChange={(details) => pageHandler.imageSize(details, state)}
                         disabled={values.imageStyle === "cover"}
                       />
@@ -136,7 +136,7 @@ export default function Page() {
                         max={100}
                         step={0.5}
                         unit="%"
-                        defaultValue={[values.imageOpacity]}
+                        value={[values.imageOpacity]}
                         onValueChange={(details) => pageHandler.imageOpacity(details, state)}
                       />
                       <Form.Slider
@@ -145,7 +145,7 @@ export default function Page() {
                         max={360}
                         step={0.5}
                         unit="deg"
-                        defaultValue={[values.imageHue]}
+                        value={[values.imageHue]}
                         onValueChange={(details) => pageHandler.imageHue(details, state)}
                       />
                       <Form.Slider
@@ -154,7 +154,7 @@ export default function Page() {
                         max={100}
                         step={0.5}
                         unit="%"
-                        defaultValue={[values.imageGrayscale * 100]}
+                        value={[values.imageGrayscale * 100]}
                         onValueChange={(details) => pageHandler.imageGrayscale(details, state)}
                       />
                       <Form.Slider
@@ -163,7 +163,7 @@ export default function Page() {
                         max={100}
                         step={0.5}
                         unit="%"
-                        defaultValue={[values.imageBlur]}
+                        value={[values.imageBlur]}
                         onValueChange={(details) => pageHandler.imageBlur(details, state)}
                       />
                     </Box>

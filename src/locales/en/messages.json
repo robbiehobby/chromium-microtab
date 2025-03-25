@@ -57,6 +57,6 @@
     "message": "Prevent closing tabs within groups"
   },
   "closeTabShortcut": {
-    "message": "Configure Keyboard Shortcuts"
+    "message": "Configure Keyboard Shortcut"
   }
 }

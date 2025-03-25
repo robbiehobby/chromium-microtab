@@ -1,8 +1,7 @@
 import { Check, X } from "lucide-react";
 import { Switch } from "@chakra-ui/react";
-import { FormProps } from "../bundle.ts";
 
-interface SwitchProps extends Switch.RootProps, FormProps {
+interface SwitchProps extends Switch.RootProps {
   label: string;
 }
 
