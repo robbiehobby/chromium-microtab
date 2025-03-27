@@ -57,7 +57,7 @@ pageHandler.imageRemove = (state: PageState) => {
 
 pageHandler.imageStyle = (details: SegmentGroupValueChangeDetails, state: PageState) => {
   const settings = { ...state.settings };
-  settings.image.style = details.value;
+  settings.image.style = String(details.value);
   pageHandler.save(settings, state);
 };
 
