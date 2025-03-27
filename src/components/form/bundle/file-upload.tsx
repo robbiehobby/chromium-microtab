@@ -44,7 +44,6 @@ export default function FormFileUpload(props: FileUploadProps) {
                 size="xs"
                 variant="plain"
                 focusVisibleRing="inside"
-                pointerEvents="auto"
                 hidden={false}
                 aria-label={removeLabel}
                 onClick={() => onFileRemove()}

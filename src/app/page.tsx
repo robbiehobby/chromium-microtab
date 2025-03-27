@@ -1,4 +1,4 @@
-import { Box, Button, CloseButton, Drawer, Field, Group, HStack, parseColor, Text } from "@chakra-ui/react";
+import { Box, Button, CloseButton, Drawer, Field, Group, HStack, parseColor, Span, Text } from "@chakra-ui/react";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings } from "lucide-react";
 import { defaultSettings, useChrome } from "../hooks/chrome.ts";
@@ -57,16 +57,20 @@ export default function Page() {
       <Drawer.Root size="sm">
         <Drawer.Trigger asChild position="fixed" right={10} bottom={10}>
           <Button
-            colorPalette="gray"
             variant="surface"
+            colorPalette="gray"
+            className="group"
             h="auto"
             p={3}
             rounded="full"
             opacity={0.4}
             _hover={{ opacity: 1 }}
             _focus={{ opacity: 1 }}
+            aria-label={getMessage("settings")}
           >
-            <Settings /> {getMessage("settings")}
+            <Span _groupHover={{ animation: "spin 1.5s infinite" }}>
+              <Settings />
+            </Span>
           </Button>
         </Drawer.Trigger>
 
