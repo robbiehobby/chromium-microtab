@@ -3,7 +3,7 @@
     "message": "Tabular"
   },
   "description": {
-    "message": "A Chromium extension designed to customize the empty new tab page."
+    "message": "Chromium extension designed to customize the empty new tab page."
   },
   "commandName": {
     "message": "Close Tab"
@@ -18,45 +18,84 @@
     "message": "Background Color"
   },
   "image": {
-    "message": "Backround Image"
+    "message": "Choose Backround Image"
+  },
+  "imageError": {
+    "message": "The maximum allowed image size is 8 MB."
   },
   "imageRemove": {
     "message": "Remove Background Image"
   },
+  "imageStyle": {
+    "message": "Style"
+  },
   "imageStyleCover": {
     "message": "Cover"
+  },
+  "imageStyleCoverHelp": {
+    "message": "Fit the background image to the size of the window."
   },
   "imageStyleRepeat": {
     "message": "Repeat"
   },
+  "imageStyleRepeatHelp": {
+    "message": "Repeat the background image across the entire window."
+  },
   "imageStyleCenter": {
     "message": "Center"
+  },
+  "imageStyleCenterHelp": {
+    "message": "Show the background image in the center of the window."
   },
   "imageSize": {
     "message": "Size"
   },
+  "imageSizeHelp": {
+    "message": "Adjust the size of the background image."
+  },
+  "imageSizeDisabledHelp": {
+    "message": "The background image size cannot be adjusted when using the cover style."
+  },
   "imageOpacity": {
     "message": "Opacity"
+  },
+  "imageOpacityHelp": {
+    "message": "Adjust the opacity of the background image."
   },
   "imageHue": {
     "message": "Hue"
   },
+  "imageHueHelp": {
+    "message": "Adjust the hue rotation of the image."
+  },
   "imageGrayscale": {
     "message": "Grayscale"
+  },
+  "imageGrayscaleHelp": {
+    "message": "Adjust the grayscale level of the background image."
   },
   "imageBlur": {
     "message": "Blur"
   },
-  "closeTabDescription": {
+  "imageBlurHelp": {
+    "message": "Adjust the blur level of the background image."
+  },
+  "closeTab": {
     "message": "Tired of accidentally closing tabs or the browser window when closing the last tab? Configure the alternative Close Tab shortcut to avoid this frustration."
   },
   "closeTabPinned": {
     "message": "Prevent closing pinned tabs"
   },
+  "closeTabPinnedHelp": {
+    "message": "When this option is enabled, pinned tabs will not be closed when using the keyboard shortcut to close tabs."
+  },
   "closeTabGrouped": {
     "message": "Prevent closing tabs within groups"
   },
+  "closeTabGroupedHelp": {
+    "message": "When this option is enabled, grouped tabs will not be closed when using the keyboard shortcut to close tabs."
+  },
   "closeTabShortcut": {
-    "message": "Configure Keyboard Shortcut"
+    "message": "Configure Keyboard Shortcuts"
   }
 }

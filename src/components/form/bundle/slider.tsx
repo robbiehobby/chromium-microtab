@@ -1,31 +1,38 @@
+import { ReactNode } from "react";
 import { HStack, Slider } from "@chakra-ui/react";
 
 interface SliderProps extends Slider.RootProps {
-  label: string;
-  min: number;
-  max: number;
+  displayLabel: string | ReactNode;
   unit: string;
 }
 
-export default function SliderElement(props: SliderProps) {
-  const { label, unit, ...restProps } = props;
-  const marks = [{ value: restProps.max / 2, label: "" }];
+export default function FormSlider(props: SliderProps) {
+  const { displayLabel, unit, ...restProps } = props;
+
+  let marks: any[] = [];
+  if (restProps.max) {
+    marks = [
+      { value: restProps.min, label: "" },
+      { value: restProps.max / 2, label: "" },
+      { value: restProps.max, label: "" },
+    ];
+  }
 
   return (
-    <Slider.Root size="sm" gap="2" {...restProps}>
+    <Slider.Root gap="md" {...restProps}>
       <HStack justify="space-between">
-        <Slider.Label>{props.label}</Slider.Label>
-        <HStack gap="0" color={{ base: "gray.500", _dark: "gray.400" }}>
-          <Slider.ValueText />
-          {unit}
+        <Slider.Label>{displayLabel}</Slider.Label>
+        <HStack gap={0} color="fg.subtle">
+          <Slider.ValueText /> {unit}
         </HStack>
       </HStack>
+
       <Slider.Control>
         <Slider.Track>
           <Slider.Range />
         </Slider.Track>
         <Slider.Thumbs />
-        <Slider.Marks marks={marks} mb="0" />
+        {marks.length && <Slider.Marks marks={marks} mb="0" />}
       </Slider.Control>
     </Slider.Root>
   );

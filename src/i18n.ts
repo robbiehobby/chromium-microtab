@@ -1,4 +1,4 @@
-import json from "../locales/en/messages.json";
+import json from "./locales/en/messages.json";
 
 interface Messages {
   [key: string]: { message: string };

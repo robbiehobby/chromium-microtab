@@ -1,17 +1,21 @@
-import { SegmentGroup } from "@chakra-ui/react";
+import { ReactNode } from "react";
+import { SegmentGroup, VisuallyHidden } from "@chakra-ui/react";
 
 interface SegmentGroupProps extends SegmentGroup.RootProps {
-  items: { [key: string]: string };
+  displayLabel: string | ReactNode;
+  items: { [key: string]: string | ReactNode };
 }
 
-export default function SegmentGroupElement(props: SegmentGroupProps) {
-  const { items, ...restProps } = props;
+export default function FormSegmentGroup(props: SegmentGroupProps) {
+  const { displayLabel, items, ...restProps } = props;
 
   return (
-    <SegmentGroup.Root w="100%" {...restProps}>
+    <SegmentGroup.Root w="full" {...restProps}>
+      <VisuallyHidden>{displayLabel}</VisuallyHidden>
       <SegmentGroup.Indicator />
+
       {Object.entries(items).map(([key, value]) => (
-        <SegmentGroup.Item key={key} value={key} w="100%" justifyContent="center">
+        <SegmentGroup.Item key={key} value={key} w="full" justifyContent="center">
           <SegmentGroup.ItemText>{value}</SegmentGroup.ItemText>
           <SegmentGroup.ItemHiddenInput />
         </SegmentGroup.Item>

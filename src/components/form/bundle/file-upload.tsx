@@ -1,36 +1,35 @@
+import { CloseButton, FileUpload, Input, InputGroup, Span, VisuallyHidden } from "@chakra-ui/react";
 import { Image } from "lucide-react";
-import { Box, CloseButton, FileUpload, Input, InputGroup, VisuallyHidden } from "@chakra-ui/react";
-import getMessage from "../../../app/i18n.ts";
 
 interface FileUploadProps extends FileUpload.RootProps {
-  label: string;
+  displayLabel: string;
+  removeLabel: string;
   defaultValue?: string;
   onFileRemove: Function;
 }
 
-export default function FileUploadElement(props: FileUploadProps) {
-  const { label, defaultValue, onFileRemove, ...restProps } = props;
+export default function FormFileUpload(props: FileUploadProps) {
+  const { displayLabel, removeLabel, defaultValue, onFileRemove, ...restProps } = props;
 
   const Icon = () => {
     return (
-      <Box color={{ base: "gray.500", _dark: "gray.400" }}>
+      <Span color="fg.muted">
         <Image size={16} />
-      </Box>
+      </Span>
     );
   };
 
   return (
     <FileUpload.Root gap="3" {...restProps}>
-      <FileUpload.HiddenInput />
       <VisuallyHidden>
-        <FileUpload.Label>{label}</FileUpload.Label>
+        <FileUpload.Label>{displayLabel}</FileUpload.Label>
       </VisuallyHidden>
 
       {!defaultValue && (
         <InputGroup startElement={<Icon />}>
           <Input asChild>
             <FileUpload.Trigger>
-              <FileUpload.FileText fallback={label} lineClamp={1} />
+              <FileUpload.FileText fallback={displayLabel} lineClamp={1} />
             </FileUpload.Trigger>
           </Input>
         </InputGroup>
@@ -42,23 +41,25 @@ export default function FileUploadElement(props: FileUploadProps) {
           endElement={
             <FileUpload.ClearTrigger asChild>
               <CloseButton
-                me="-2"
                 size="xs"
                 variant="plain"
                 focusVisibleRing="inside"
                 pointerEvents="auto"
                 hidden={false}
-                aria-label={getMessage("imageRemove")}
+                aria-label={removeLabel}
                 onClick={() => onFileRemove()}
               />
             </FileUpload.ClearTrigger>
           }
+          endElementProps={{ px: 1 }}
         >
           <Input asChild>
             <input value={defaultValue} readOnly={true} />
           </Input>
         </InputGroup>
       )}
+
+      <FileUpload.HiddenInput />
     </FileUpload.Root>
   );
 }

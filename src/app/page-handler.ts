@@ -6,71 +6,99 @@ import {
   SwitchCheckedChangeDetails,
 } from "@chakra-ui/react";
 import { PageState } from "./page.tsx";
-import { defaultValues } from "../hooks/storage.ts";
+import { defaultSettings, useChrome } from "../hooks/chrome.ts";
+import getMessage from "../i18n.ts";
 
 export default function pageHandler() {}
 
+pageHandler.save = (settings: typeof defaultSettings, state: PageState) => {
+  state.setSettings(settings);
+  useChrome().saveSettings(settings);
+};
+
 pageHandler.color = (details: ColorPickerValueChangeDetails, state: PageState) => {
-  state.setValues({ ...state.values, color: details.value.toString("rgba") });
+  const settings = { ...state.settings };
+  settings.color = details.value.toString("rgba");
+  pageHandler.save(settings, state);
 };
 
 pageHandler.image = (details: FileUploadFileChangeDetails, state: PageState) => {
   const { errors } = state;
-
-  if (details.rejectedFiles.length) return state.setErrors({ ...errors, image: "Maximum allowed size is 8 MB." });
+  if (details.rejectedFiles.length) {
+    state.setErrors({ ...errors, image: getMessage("imageError") });
+    return;
+  }
   if (errors.image) state.setErrors({ ...errors, image: undefined });
-  if (!details.acceptedFiles.length) return state.setValues({ ...state.values, imageName: "", imageData: "" });
+
+  if (!details.acceptedFiles.length) {
+    const settings = { ...state.settings };
+    settings.image.filename = "";
+    settings.image.data = "";
+    pageHandler.save(settings, state);
+    return;
+  }
 
   const file = details.acceptedFiles[0];
   const reader = new FileReader();
-  reader.onloadend = () => state.setValues({ ...state.values, imageName: file.name, imageData: String(reader.result) });
+  reader.onloadend = () => {
+    const settings = { ...state.settings };
+    settings.image.filename = file.name;
+    settings.image.data = String(reader.result);
+    pageHandler.save(settings, state);
+  };
   reader.readAsDataURL(file);
 };
 
 pageHandler.imageRemove = (state: PageState) => {
-  const values = defaultValues;
-
-  state.setValues({
-    ...state.values,
-    imageName: "",
-    imageData: "",
-    imageStyle: values.imageStyle,
-    imageSize: values.imageSize,
-    imageOpacity: values.imageOpacity,
-    imageHue: values.imageHue,
-    imageGrayscale: values.imageGrayscale,
-    imageBlur: values.imageBlur,
-  });
+  const settings = { ...state.settings };
+  settings.image = defaultSettings.image;
+  pageHandler.save(settings, state);
 };
 
 pageHandler.imageStyle = (details: SegmentGroupValueChangeDetails, state: PageState) => {
-  state.setValues({ ...state.values, imageStyle: details.value });
+  const settings = { ...state.settings };
+  settings.image.style = details.value;
+  pageHandler.save(settings, state);
 };
 
 pageHandler.imageSize = (details: SliderValueChangeDetails, state: PageState) => {
-  state.setValues({ ...state.values, imageSize: details.value[0] });
+  const settings = { ...state.settings };
+  settings.image.size = Number(details.value[0]);
+  pageHandler.save(settings, state);
 };
 
 pageHandler.imageOpacity = (details: SliderValueChangeDetails, state: PageState) => {
-  state.setValues({ ...state.values, imageOpacity: details.value[0] });
+  const settings = { ...state.settings };
+  settings.image.opacity = Number(details.value[0]);
+  pageHandler.save(settings, state);
 };
 
 pageHandler.imageHue = (details: SliderValueChangeDetails, state: PageState) => {
-  state.setValues({ ...state.values, imageHue: details.value[0] });
+  const settings = { ...state.settings };
+  settings.image.hue = Number(details.value[0]);
+  pageHandler.save(settings, state);
 };
 
 pageHandler.imageGrayscale = (details: SliderValueChangeDetails, state: PageState) => {
-  state.setValues({ ...state.values, imageGrayscale: details.value[0] / 100 });
+  const settings = { ...state.settings };
+  settings.image.grayscale = Number(details.value[0] / 100);
+  pageHandler.save(settings, state);
 };
 
 pageHandler.imageBlur = (details: SliderValueChangeDetails, state: PageState) => {
-  state.setValues({ ...state.values, imageBlur: details.value[0] });
+  const settings = { ...state.settings };
+  settings.image.blur = Number(details.value[0]);
+  pageHandler.save(settings, state);
 };
 
 pageHandler.closeTabPinned = (details: SwitchCheckedChangeDetails, state: PageState) => {
-  state.setValues({ ...state.values, closeTabPinned: details.checked });
+  const settings = { ...state.settings };
+  settings.closeTab.pinned = details.checked;
+  pageHandler.save(settings, state);
 };
 
 pageHandler.closeTabGrouped = (details: SwitchCheckedChangeDetails, state: PageState) => {
-  state.setValues({ ...state.values, closeTabGrouped: details.checked });
+  const settings = { ...state.settings };
+  settings.closeTab.grouped = details.checked;
+  pageHandler.save(settings, state);
 };

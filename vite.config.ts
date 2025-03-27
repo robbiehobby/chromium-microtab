@@ -19,7 +19,6 @@ export default defineConfig({
     outDir: "build",
     rollupOptions: {
       input: {
-        theme: "./src/theme.css",
         main: "./index.html",
         background: "./src/app/background.ts",
       },

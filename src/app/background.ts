@@ -1,27 +1,27 @@
-chrome.commands.onCommand.addListener((command: string) => {
+import { defaultSettings } from "../hooks/chrome.ts";
+
+chrome.commands.onCommand.addListener(async (command: string) => {
   if (command !== "close-tab") return;
 
-  chrome.windows.getCurrent({ populate: true }, async (window: chrome.windows.Window) => {
-    if (!window.tabs || window.tabs.length === 0) return;
-    const tab = window.tabs.find((_tab) => _tab.active);
-    if (!tab?.id) return;
-    const { settings } = await chrome.storage.local.get(["settings"]);
+  const window = await chrome.windows.getCurrent({ populate: true });
+  if (!window.tabs || window.tabs.length === 0) return;
+  const tab = window.tabs.find((tab) => tab.active);
+  if (!tab || !tab.id) return;
+  const settings: typeof defaultSettings = (await chrome.storage.local.get(["page"])).page || defaultSettings;
 
-    const { closeTabPinned, closeTabGrouped } = settings;
-    const isProtected = (closeTabPinned && tab.pinned) || (closeTabGrouped && tab.groupId !== -1);
-    if (isProtected) return;
+  // Check which close tab protections are enabled.
+  const { pinned, grouped } = settings.closeTab;
+  if ((pinned && tab.pinned) || (grouped && tab.groupId !== -1)) return;
 
-    // Find other tabs that are neither pinned nor grouped.
-    const tabs = window.tabs.filter((_tab) => {
-      return !_tab.pinned && _tab.groupId === -1 && _tab.id !== tab.id;
+  try {
+    const tabs = window.tabs.filter((otherTab) => {
+      // Filter the tabs to close based on the enabled protections.
+      return !otherTab.pinned && otherTab.groupId === -1 && otherTab.id !== tab.id;
     });
-
-    try {
-      if (!tabs.length) {
-        if (tab.url?.match(/^\w+:\/\/newtab\//)) return;
-        await chrome.tabs.create({});
-      }
-      await chrome.tabs.remove(tab.id);
-    } catch (_e) {}
-  });
+    if (!tabs.length) {
+      if (tab.url?.match(/^\w+:\/\/newtab\//)) return;
+      await chrome.tabs.create({});
+    }
+    await chrome.tabs.remove(tab.id);
+  } catch (_e) {}
 });

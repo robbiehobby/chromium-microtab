@@ -1,65 +1,56 @@
-import { Box, Button, CloseButton, Drawer, Field, parseColor, Text, VisuallyHidden } from "@chakra-ui/react";
+import { Box, Button, CloseButton, Drawer, Field, Group, HStack, parseColor, Text } from "@chakra-ui/react";
 import { SetStateAction, useEffect, useRef, useState } from "react";
-import { Settings } from "lucide-react";
-import useStorage, { defaultValues } from "../hooks/storage.ts";
+import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings } from "lucide-react";
+import { defaultSettings, useChrome } from "../hooks/chrome.ts";
 import Form from "../components/form/bundle.ts";
 import pageHandler from "./page-handler.ts";
-import color from "../components/ui/color.ts";
-import getMessage from "./i18n.ts";
+import getMessage from "../i18n.ts";
+import Ui from "../components/ui/bundle.ts";
 
 export interface PageState {
-  values: Record<any, any>;
-  setValues: SetStateAction<any>;
+  settings: typeof defaultSettings;
+  setSettings: SetStateAction<any>;
   errors: Record<any, any>;
   setErrors: SetStateAction<any>;
 }
 
 export default function Page() {
-  const [loaded, setLoaded] = useState(false);
-  const [values, setValues] = useState(defaultValues);
+  const [settings, setSettings] = useState(defaultSettings);
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const state: PageState = { values, setValues, errors, setErrors };
-  const imageBox = useRef<HTMLDivElement>(null!);
+  const state: PageState = { settings, setSettings, errors, setErrors };
 
   useEffect(() => {
-    const process = async () => {
-      const { getSettings, setSettings } = useStorage();
-
-      if (!loaded) {
-        const settings = await getSettings();
-        if (Object.keys(settings).length) setValues(settings as typeof defaultValues);
-        setLoaded(true);
-      }
-
-      if (values.color) document.body.style.backgroundColor = values.color;
-      if (values.imageData) imageBox.current.style.backgroundImage = `url(${values.imageData})`;
-      else imageBox.current.style.backgroundImage = "";
-
-      await setSettings(values);
-    };
-    process();
-
+    useChrome()
+      .getSettings()
+      .then((settings) => setSettings(settings));
     return () => {};
-  }, [values]);
+  }, []);
 
-  const imageFilters: string[] = [];
-  if (values.imageHue) imageFilters.push(`hue-rotate(${values.imageHue}deg)`);
-  if (values.imageGrayscale) imageFilters.push(`grayscale(${values.imageGrayscale})`);
-  if (values.imageBlur) imageFilters.push(`blur(${values.imageBlur}px)`);
+  const overlay = useRef<HTMLDivElement>(null);
+
+  if (settings.color) document.body.style.backgroundColor = settings.color;
+  if (overlay.current) {
+    if (settings.image.data) overlay.current.style.backgroundImage = `url(${settings.image.data})`;
+    else overlay.current.style.backgroundImage = "";
+  }
+
+  const filters: string[] = [];
+  if (settings.image.hue) filters.push(`hue-rotate(${settings.image.hue}deg)`);
+  if (settings.image.grayscale) filters.push(`grayscale(${settings.image.grayscale})`);
+  if (settings.image.blur) filters.push(`blur(${settings.image.blur}px)`);
 
   return (
     <>
       <Box
         id="image"
-        ref={imageBox}
+        ref={overlay}
         position="fixed"
         inset={0}
-        backgroundSize={values.imageStyle === "cover" ? "cover" : `${values.imageSize}%`}
-        backgroundRepeat={values.imageStyle === "repeat" ? "repeat" : "no-repeat"}
+        backgroundSize={settings.image.style === "cover" ? "cover" : `${settings.image.size}%`}
+        backgroundRepeat={settings.image.style === "repeat" ? "repeat" : "no-repeat"}
         backgroundPosition="center"
-        opacity={`${values.imageOpacity}%`}
-        filter={imageFilters.join(" ")}
+        opacity={`${settings.image.opacity}%`}
+        filter={filters.join(" ")}
         transform="translateZ(0)"
       />
 
@@ -70,134 +61,191 @@ export default function Page() {
             variant="surface"
             h="auto"
             p={3}
-            rounded="4xl"
+            rounded="full"
             opacity={0.4}
             _hover={{ opacity: 1 }}
             _focus={{ opacity: 1 }}
           >
-            <Settings /> <VisuallyHidden>{getMessage("settings")}</VisuallyHidden>
+            <Settings /> {getMessage("settings")}
           </Button>
         </Drawer.Trigger>
+
         <Drawer.Positioner>
           <Drawer.Content>
             <Drawer.Header>
-              <Drawer.Title>{getMessage("settings")}</Drawer.Title>
               <Drawer.CloseTrigger asChild pos="initial">
-                <CloseButton aria-label={getMessage("close")} />
+                <CloseButton size="2xs" aria-label={getMessage("close")} />
               </Drawer.CloseTrigger>
+              <Drawer.Title>{getMessage("settings")}</Drawer.Title>
             </Drawer.Header>
+
             <Drawer.Body pb={6}>
               <form>
                 <Form.ColorPicker
-                  label={getMessage("color")}
-                  value={values.color ? parseColor(values.color) : undefined}
-                  onValueChange={(details) => pageHandler.color(details, state)}
+                  displayLabel={getMessage("color")}
                   mb={4}
+                  value={settings.color ? parseColor(settings.color) : undefined}
+                  onValueChange={(details) => pageHandler.color(details, state)}
                 />
 
                 <Field.Root invalid={!!errors.image} mb={4}>
                   <Form.FileUpload
-                    label={getMessage("image")}
+                    displayLabel={getMessage("image")}
+                    removeLabel={getMessage("imageRemove")}
                     accept="image/*"
                     maxFileSize={8000000}
-                    defaultValue={values.imageName}
+                    defaultValue={settings.image.filename}
                     onFileChange={(details) => pageHandler.image(details, state)}
                     onFileRemove={() => pageHandler.imageRemove(state)}
                   />
                   {errors.image && <Field.ErrorText>{errors.image}</Field.ErrorText>}
                 </Field.Root>
 
-                {values.imageData && (
+                {settings.image.data && (
                   <>
                     <Form.SegmentGroup
+                      displayLabel={getMessage("imageStyle")}
                       items={{
-                        cover: getMessage("imageStyleCover"),
-                        repeat: getMessage("imageStyleRepeat"),
-                        center: getMessage("imageStyleCenter"),
+                        cover: (
+                          <Ui.Tooltip.Root content={getMessage("imageStyleCoverHelp")}>
+                            <HStack>
+                              <Expand size={13} /> {getMessage("imageStyleCover")}
+                            </HStack>
+                          </Ui.Tooltip.Root>
+                        ),
+                        repeat: (
+                          <Ui.Tooltip.Root content={getMessage("imageStyleRepeatHelp")}>
+                            <HStack>
+                              <LayoutGrid size={13} /> {getMessage("imageStyleRepeat")}
+                            </HStack>
+                          </Ui.Tooltip.Root>
+                        ),
+                        center: (
+                          <Ui.Tooltip.Root content={getMessage("imageStyleCenterHelp")}>
+                            <HStack>
+                              <Fullscreen size={13} /> {getMessage("imageStyleCenter")}
+                            </HStack>
+                          </Ui.Tooltip.Root>
+                        ),
                       }}
-                      value={values.imageStyle}
-                      onValueChange={(details) => pageHandler.imageStyle(details, state)}
+                      size="sm"
                       mb="4"
+                      value={settings.image.style}
+                      onValueChange={(details) => pageHandler.imageStyle(details, state)}
                     />
-                    <Box mb={4} px={5} pt={4} pb={1} border="sm" borderColor={color.border.primary} rounded="sm">
+
+                    <Box css={{ mb: 3, px: 3, pt: 2.5 }} border="subtle" rounded="sm">
                       <Form.Slider
-                        label={getMessage("imageSize")}
+                        displayLabel={
+                          <HStack>
+                            <Ui.Tooltip.Info
+                              content={
+                                settings.image.style === "cover"
+                                  ? getMessage("imageSizeDisabledHelp")
+                                  : getMessage("imageSizeHelp")
+                              }
+                            />
+                            {getMessage("imageSize")}
+                          </HStack>
+                        }
+                        size="sm"
+                        unit="%"
+                        step={0.5}
                         min={0}
                         max={200}
-                        step={0.5}
-                        unit="%"
-                        value={[values.imageSize]}
+                        value={[settings.image.size]}
                         onValueChange={(details) => pageHandler.imageSize(details, state)}
-                        disabled={values.imageStyle === "cover"}
+                        disabled={settings.image.style === "cover"}
                       />
                       <Form.Slider
-                        label={getMessage("imageOpacity")}
+                        displayLabel={
+                          <HStack>
+                            <Ui.Tooltip.Info content={getMessage("imageOpacityHelp")} /> {getMessage("imageOpacity")}
+                          </HStack>
+                        }
+                        size="sm"
+                        unit="%"
+                        step={0.5}
                         min={0}
                         max={100}
-                        step={0.5}
-                        unit="%"
-                        value={[values.imageOpacity]}
+                        value={[settings.image.opacity]}
                         onValueChange={(details) => pageHandler.imageOpacity(details, state)}
                       />
                       <Form.Slider
-                        label={getMessage("imageHue")}
+                        displayLabel={
+                          <HStack>
+                            <Ui.Tooltip.Info content={getMessage("imageHueHelp")} /> {getMessage("imageHue")}
+                          </HStack>
+                        }
+                        size="sm"
+                        unit="deg"
+                        step={0.5}
                         min={0}
                         max={360}
-                        step={0.5}
-                        unit="deg"
-                        value={[values.imageHue]}
+                        value={[settings.image.hue]}
                         onValueChange={(details) => pageHandler.imageHue(details, state)}
                       />
                       <Form.Slider
-                        label={getMessage("imageGrayscale")}
+                        displayLabel={
+                          <HStack>
+                            <Ui.Tooltip.Info content={getMessage("imageGrayscaleHelp")} />
+                            {getMessage("imageGrayscale")}
+                          </HStack>
+                        }
+                        size="sm"
+                        unit="%"
+                        step={0.5}
                         min={0}
                         max={100}
-                        step={0.5}
-                        unit="%"
-                        value={[values.imageGrayscale * 100]}
+                        value={[settings.image.grayscale * 100]}
                         onValueChange={(details) => pageHandler.imageGrayscale(details, state)}
                       />
                       <Form.Slider
-                        label={getMessage("imageBlur")}
+                        displayLabel={
+                          <HStack>
+                            <Ui.Tooltip.Info content={getMessage("imageBlurHelp")} /> {getMessage("imageBlur")}
+                          </HStack>
+                        }
+                        size="sm"
+                        unit="%"
+                        step={0.5}
                         min={0}
                         max={100}
-                        step={0.5}
-                        unit="%"
-                        value={[values.imageBlur]}
+                        value={[settings.image.blur]}
                         onValueChange={(details) => pageHandler.imageBlur(details, state)}
                       />
                     </Box>
                   </>
                 )}
 
-                <Box px={5} py={4} border="sm" borderColor={color.border.primary} rounded="sm">
-                  <Text mb={6} pb={5} borderBottom="sm" borderBottomColor={color.border.primary} fontSize="sm">
-                    {getMessage("closeTabDescription")}
+                <Box p={3} border="subtle" rounded="sm">
+                  <Text mb={4} fontSize="sm">
+                    {getMessage("closeTab")}
                   </Text>
 
-                  <Form.Switch
-                    label={getMessage("closeTabPinned")}
-                    checked={values.closeTabPinned}
-                    onCheckedChange={(details) => pageHandler.closeTabPinned(details, state)}
-                    mb={3}
-                  />
-                  <Form.Switch
-                    label={getMessage("closeTabGrouped")}
-                    checked={values.closeTabGrouped}
-                    onCheckedChange={(details) => pageHandler.closeTabGrouped(details, state)}
-                    mb={6}
-                  />
+                  <Group display="flex" mb={3}>
+                    <Ui.Tooltip.Info content={getMessage("closeTabPinnedHelp")} />
+                    <Form.Switch
+                      displayLabel={getMessage("closeTabPinned")}
+                      flexGrow={1}
+                      checked={settings.closeTab.pinned}
+                      onCheckedChange={(details) => pageHandler.closeTabPinned(details, state)}
+                    />
+                  </Group>
 
-                  <Button asChild variant="outline" w="100%">
-                    <a
-                      href="#"
-                      onClick={() => {
-                        try {
-                          chrome.tabs.create({ url: "chrome://extensions/shortcuts" });
-                        } catch (_e) {}
-                      }}
-                    >
-                      {getMessage("closeTabShortcut")}
+                  <Group display="flex" mb={5}>
+                    <Ui.Tooltip.Info content={getMessage("closeTabGroupedHelp")} />
+                    <Form.Switch
+                      displayLabel={getMessage("closeTabGrouped")}
+                      flexGrow={1}
+                      checked={settings.closeTab.grouped}
+                      onCheckedChange={(details) => pageHandler.closeTabGrouped(details, state)}
+                    />
+                  </Group>
+
+                  <Button asChild size="sm" variant="outline" w="full">
+                    <a href="#" onClick={() => useChrome().openShortcuts()}>
+                      <Keyboard /> {getMessage("closeTabShortcut")}
                     </a>
                   </Button>
                 </Box>

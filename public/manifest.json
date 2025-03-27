@@ -4,7 +4,8 @@
   "name": "__MSG_name__",
   "description": "__MSG_description__",
   "background": {
-    "service_worker": "assets/background.js"
+    "service_worker": "assets/background.js",
+    "type": "module"
   },
   "chrome_url_overrides": {
     "newtab": "index.html"
