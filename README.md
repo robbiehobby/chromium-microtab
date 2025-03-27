@@ -3,6 +3,5 @@ Thanks to <a href="https://lucide.dev/">Lucide</a> for providing the icons and <
 
 <br>
 
-![](/metadata/tabular-1.png)
-![](/metadata/tabular-2.png)
-![](/metadata/tabular-3.png)
+![](/metadata/screenshot-1.png)
+![](/metadata/screenshot-2.png)

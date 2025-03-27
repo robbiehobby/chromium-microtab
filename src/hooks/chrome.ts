@@ -18,10 +18,15 @@ export const defaultSettings = {
 
 export function useChrome() {
   const getSettings = async () => {
+    const settings = structuredClone(defaultSettings);
     try {
-      return (await chrome.storage.local.get(["page"])).page || defaultSettings;
+      return (await chrome.storage.local.get(["page"])).page || settings;
     } catch (_e) {
-      return JSON.parse(window.localStorage.getItem("page") || "");
+      try {
+        return JSON.parse(window.localStorage.getItem("page") || "");
+      } catch (_e) {
+        return settings;
+      }
     }
   };
 
@@ -33,11 +38,19 @@ export function useChrome() {
     }
   };
 
+  const resetSettings = async () => {
+    try {
+      await chrome.storage.local.clear();
+    } catch (_e) {
+      window.localStorage.removeItem("page");
+    }
+  };
+
   const openShortcuts = () => {
     try {
       chrome.tabs.create({ url: "chrome://extensions/shortcuts" });
     } catch (_e) {}
   };
 
-  return { getSettings, saveSettings, openShortcuts };
+  return { getSettings, saveSettings, resetSettings, openShortcuts };
 }

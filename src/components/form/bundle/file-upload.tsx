@@ -47,6 +47,7 @@ export default function FormFileUpload(props: FileUploadProps) {
                 hidden={false}
                 aria-label={removeLabel}
                 onClick={() => onFileRemove()}
+                data-clear
               />
             </FileUpload.ClearTrigger>
           }

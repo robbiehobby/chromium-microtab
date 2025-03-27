@@ -97,5 +97,11 @@
   },
   "closeTabShortcut": {
     "message": "Configure Keyboard Shortcuts"
+  },
+  "reset": {
+    "message": "Reset"
+  },
+  "resetConfirm": {
+    "message": "Are you sure you want to restore the default settings?"
   }
 }

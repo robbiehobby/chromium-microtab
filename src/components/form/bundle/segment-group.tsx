@@ -12,7 +12,7 @@ export default function FormSegmentGroup(props: SegmentGroupProps) {
   return (
     <SegmentGroup.Root w="full" {...restProps}>
       <VisuallyHidden>{displayLabel}</VisuallyHidden>
-      <SegmentGroup.Indicator />
+      <SegmentGroup.Indicator backgroundColor="colorPalette.subtle" />
 
       {Object.entries(items).map(([key, value]) => (
         <SegmentGroup.Item key={key} value={key} w="full" justifyContent="center">

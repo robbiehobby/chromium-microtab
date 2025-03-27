@@ -1,6 +1,6 @@
 import { Box, Button, CloseButton, Drawer, Field, Group, HStack, parseColor, Span, Text } from "@chakra-ui/react";
 import { SetStateAction, useEffect, useRef, useState } from "react";
-import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings } from "lucide-react";
+import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings, TriangleAlert } from "lucide-react";
 import { defaultSettings, useChrome } from "../hooks/chrome.ts";
 import Form from "../components/form/bundle.ts";
 import pageHandler from "./page-handler.ts";
@@ -29,6 +29,7 @@ export default function Page() {
   const overlay = useRef<HTMLDivElement>(null);
 
   if (settings.color) document.body.style.backgroundColor = settings.color;
+  else document.body.style.backgroundColor = "";
   if (overlay.current) {
     if (settings.image.data) overlay.current.style.backgroundImage = `url(${settings.image.data})`;
     else overlay.current.style.backgroundImage = "";
@@ -88,7 +89,7 @@ export default function Page() {
                 <Form.ColorPicker
                   displayLabel={getMessage("color")}
                   mb={4}
-                  value={settings.color ? parseColor(settings.color) : undefined}
+                  value={settings.color ? parseColor(settings.color) : parseColor("#000")}
                   onValueChange={(details) => pageHandler.color(details, state)}
                 />
 
@@ -255,6 +256,15 @@ export default function Page() {
                 </Box>
               </form>
             </Drawer.Body>
+
+            <Drawer.Footer>
+              <Button size="2xs" variant="ghost" colorPalette="gray" onClick={() => pageHandler.reset(state)}>
+                <Span color="fg.warning">
+                  <TriangleAlert size={8} />
+                </Span>
+                {getMessage("reset")}
+              </Button>
+            </Drawer.Footer>
           </Drawer.Content>
         </Drawer.Positioner>
       </Drawer.Root>

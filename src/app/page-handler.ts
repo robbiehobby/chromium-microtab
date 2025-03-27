@@ -51,7 +51,7 @@ pageHandler.image = (details: FileUploadFileChangeDetails, state: PageState) => 
 
 pageHandler.imageRemove = (state: PageState) => {
   const settings = { ...state.settings };
-  settings.image = defaultSettings.image;
+  settings.image = structuredClone(defaultSettings.image);
   pageHandler.save(settings, state);
 };
 
@@ -101,4 +101,15 @@ pageHandler.closeTabGrouped = (details: SwitchCheckedChangeDetails, state: PageS
   const settings = { ...state.settings };
   settings.closeTab.grouped = details.checked;
   pageHandler.save(settings, state);
+};
+
+pageHandler.reset = (state: PageState) => {
+  if (!window.confirm(getMessage("resetConfirm"))) return;
+
+  document
+    .querySelectorAll("button[data-clear]")
+    .forEach((btn) => btn.dispatchEvent(new MouseEvent("click", { bubbles: true })));
+
+  pageHandler.save(structuredClone(defaultSettings), state);
+  useChrome().resetSettings();
 };
