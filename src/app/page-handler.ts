@@ -44,7 +44,7 @@ handler.setImageData = (state: State, details: { file: File; reader: FileReader 
 };
 
 handler.removeImage = (state: State) => {
-  state.settings.image = { ...defaultSettings.image };
+  state.settings.image = structuredClone(defaultSettings.image);
 };
 
 handler.setImageStyle = (state: State, details: SegmentGroupValueChangeDetails) => {
@@ -80,7 +80,7 @@ handler.setCloseTabGrouped = (state: State, details: SwitchCheckedChangeDetails)
 };
 
 handler.reset = (state: State) => {
-  state.settings = { ...defaultSettings };
+  state.settings = structuredClone(defaultSettings);
 };
 
 export default function pageReducer(prevState: State, action: Action) {

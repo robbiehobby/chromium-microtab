@@ -8,7 +8,7 @@ import chromeApi, { defaultSettings } from "../apis/chrome.ts";
 import pageReducer from "./page-handler.ts";
 
 export default function Page() {
-  const [state, dispatch] = useReducer(pageReducer, { settings: { ...defaultSettings }, errors: {} });
+  const [state, dispatch] = useReducer(pageReducer, { settings: structuredClone(defaultSettings), errors: {} });
   const { settings, errors } = state;
 
   useEffect(() => {
