@@ -1,4 +1,4 @@
-import { Box, Button, CloseButton, Drawer, HStack, Span, Text } from "@chakra-ui/react";
+import { Bleed, Box, Button, CloseButton, Drawer, HStack, Separator, Span, Text } from "@chakra-ui/react";
 import { useEffect, useReducer, useRef } from "react";
 import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings, TriangleAlert } from "lucide-react";
 import Form from "../components/form/bundle.ts";
@@ -6,6 +6,30 @@ import getMessage from "../i18n.ts";
 import Ui from "../components/ui/bundle.ts";
 import chromeApi, { defaultSettings } from "../apis/chrome.ts";
 import pageReducer from "./page-handler.ts";
+
+const staticRender = {
+  seperator: {
+    bleed: (
+      <Bleed inline={5}>
+        <Separator size="xs" my={6} />
+      </Bleed>
+    ),
+  },
+  closeTab: {
+    text: (
+      <Text mb={5} fontSize="sm">
+        {getMessage("closeTab")}
+      </Text>
+    ),
+    button: (
+      <Button asChild size="sm" variant="outline" w="full" mt={4}>
+        <a href="#" onClick={() => chromeApi.openShortcuts()}>
+          <Keyboard /> {getMessage("closeTabShortcut")}
+        </a>
+      </Button>
+    ),
+  },
+};
 
 export default function Page() {
   const [state, dispatch] = useReducer(pageReducer, { settings: structuredClone(defaultSettings), errors: {} });
@@ -71,22 +95,24 @@ export default function Page() {
         </Drawer.Trigger>
 
         <Drawer.Positioner>
-          <Drawer.Content>
-            <Drawer.Header>
+          <Drawer.Content overflowX="hidden">
+            <Drawer.Header pb={2} shadow="0 10px 10px 0 var(--shadow-color)" shadowColor="bg.panel" zIndex={1}>
               <Drawer.CloseTrigger asChild pos="initial">
                 <CloseButton size="2xs" aria-label={getMessage("close")} />
               </Drawer.CloseTrigger>
               <Drawer.Title>{getMessage("settings")}</Drawer.Title>
             </Drawer.Header>
 
-            <Drawer.Body pb={6}>
+            <Drawer.Body pt={4} pb={6}>
               <form>
                 <Form.ColorPicker
                   displayLabel={getMessage("color")}
-                  mb={4}
                   hex={settings.color || undefined}
                   onValueChange={(details) => onChange("setColor", details)}
                 />
+
+                {staticRender.seperator.bleed}
+
                 <Form.FileUpload
                   displayLabel={getMessage("image")}
                   accept="image/*"
@@ -132,118 +158,109 @@ export default function Page() {
                       onValueChange={(details) => onChange("setImageStyle", details)}
                     />
 
-                    <Box css={{ mb: 3, px: 3, pt: 2.5 }} border="subtle" rounded="sm">
-                      <Form.Slider
-                        displayLabel={
-                          <HStack>
-                            <Ui.Tooltip.Info
-                              content={
-                                settings.image.style === "cover"
-                                  ? getMessage("imageSizeDisabledHelp")
-                                  : getMessage("imageSizeHelp")
-                              }
-                            />
-                            {getMessage("imageSize")}
-                          </HStack>
-                        }
-                        size="sm"
-                        unit="%"
-                        step={0.5}
-                        min={0}
-                        max={200}
-                        value={[settings.image.size]}
-                        onValueChange={(details) => onChange("setImageSize", details)}
-                        disabled={settings.image.style === "cover"}
-                      />
-                      <Form.Slider
-                        displayLabel={
-                          <HStack>
-                            <Ui.Tooltip.Info content={getMessage("imageOpacityHelp")} /> {getMessage("imageOpacity")}
-                          </HStack>
-                        }
-                        size="sm"
-                        unit="%"
-                        step={0.5}
-                        min={0}
-                        max={100}
-                        value={[settings.image.opacity]}
-                        onValueChange={(details) => onChange("setImageOpacity", details)}
-                      />
-                      <Form.Slider
-                        displayLabel={
-                          <HStack>
-                            <Ui.Tooltip.Info content={getMessage("imageHueHelp")} /> {getMessage("imageHue")}
-                          </HStack>
-                        }
-                        size="sm"
-                        unit="deg"
-                        step={0.5}
-                        min={0}
-                        max={360}
-                        value={[settings.image.hue]}
-                        onValueChange={(details) => onChange("setImageHue", details)}
-                      />
-                      <Form.Slider
-                        displayLabel={
-                          <HStack>
-                            <Ui.Tooltip.Info content={getMessage("imageGrayscaleHelp")} />
-                            {getMessage("imageGrayscale")}
-                          </HStack>
-                        }
-                        size="sm"
-                        unit="%"
-                        step={0.5}
-                        min={0}
-                        max={100}
-                        value={[settings.image.grayscale * 100]}
-                        onValueChange={(details) => onChange("setImageGrayscale", details)}
-                      />
-                      <Form.Slider
-                        displayLabel={
-                          <HStack>
-                            <Ui.Tooltip.Info content={getMessage("imageBlurHelp")} /> {getMessage("imageBlur")}
-                          </HStack>
-                        }
-                        size="sm"
-                        unit="%"
-                        step={0.5}
-                        min={0}
-                        max={100}
-                        value={[settings.image.blur]}
-                        onValueChange={(details) => onChange("setImageBlur", details)}
-                      />
-                    </Box>
+                    <Form.Slider
+                      displayLabel={
+                        <HStack>
+                          <Ui.Tooltip.Info
+                            content={
+                              settings.image.style === "cover"
+                                ? getMessage("imageSizeDisabledHelp")
+                                : getMessage("imageSizeHelp")
+                            }
+                          />
+                          {getMessage("imageSize")}
+                        </HStack>
+                      }
+                      size="sm"
+                      unit="%"
+                      step={0.5}
+                      min={0}
+                      max={200}
+                      value={[settings.image.size]}
+                      onValueChange={(details) => onChange("setImageSize", details)}
+                      disabled={settings.image.style === "cover"}
+                    />
+                    <Form.Slider
+                      displayLabel={
+                        <HStack>
+                          <Ui.Tooltip.Info content={getMessage("imageOpacityHelp")} /> {getMessage("imageOpacity")}
+                        </HStack>
+                      }
+                      size="sm"
+                      unit="%"
+                      step={0.5}
+                      min={0}
+                      max={100}
+                      value={[settings.image.opacity]}
+                      onValueChange={(details) => onChange("setImageOpacity", details)}
+                    />
+                    <Form.Slider
+                      displayLabel={
+                        <HStack>
+                          <Ui.Tooltip.Info content={getMessage("imageHueHelp")} /> {getMessage("imageHue")}
+                        </HStack>
+                      }
+                      size="sm"
+                      unit="deg"
+                      step={0.5}
+                      min={0}
+                      max={360}
+                      value={[settings.image.hue]}
+                      onValueChange={(details) => onChange("setImageHue", details)}
+                    />
+                    <Form.Slider
+                      displayLabel={
+                        <HStack>
+                          <Ui.Tooltip.Info content={getMessage("imageGrayscaleHelp")} />
+                          {getMessage("imageGrayscale")}
+                        </HStack>
+                      }
+                      size="sm"
+                      unit="%"
+                      step={0.5}
+                      min={0}
+                      max={100}
+                      value={[settings.image.grayscale * 100]}
+                      onValueChange={(details) => onChange("setImageGrayscale", details)}
+                    />
+                    <Form.Slider
+                      displayLabel={
+                        <HStack>
+                          <Ui.Tooltip.Info content={getMessage("imageBlurHelp")} /> {getMessage("imageBlur")}
+                        </HStack>
+                      }
+                      size="sm"
+                      unit="%"
+                      step={0.5}
+                      min={0}
+                      max={100}
+                      value={[settings.image.blur]}
+                      onValueChange={(details) => onChange("setImageBlur", details)}
+                    />
                   </>
                 )}
 
-                <Box p={3} border="subtle" rounded="sm">
-                  <Text mb={4} fontSize="sm">
-                    {getMessage("closeTab")}
-                  </Text>
+                {staticRender.seperator.bleed}
+                {staticRender.closeTab.text}
 
-                  <Form.Switch
-                    displayLabel={getMessage("closeTabPinned")}
-                    tooltip={getMessage("closeTabPinnedHelp")}
-                    checked={settings.closeTab.pinned}
-                    onCheckedChange={(details) => onChange("setCloseTabPinned", details)}
-                  />
-                  <Form.Switch
-                    displayLabel={getMessage("closeTabGrouped")}
-                    tooltip={getMessage("closeTabGroupedHelp")}
-                    checked={settings.closeTab.grouped}
-                    onCheckedChange={(details) => onChange("setCloseTabGrouped", details)}
-                  />
+                <Form.Switch
+                  displayLabel={getMessage("closeTabPinned")}
+                  tooltip={getMessage("closeTabPinnedHelp")}
+                  checked={settings.closeTab.pinned}
+                  onCheckedChange={(details) => onChange("setCloseTabPinned", details)}
+                />
+                <Form.Switch
+                  displayLabel={getMessage("closeTabGrouped")}
+                  tooltip={getMessage("closeTabGroupedHelp")}
+                  checked={settings.closeTab.grouped}
+                  onCheckedChange={(details) => onChange("setCloseTabGrouped", details)}
+                />
 
-                  <Button asChild size="sm" variant="outline" w="full">
-                    <a href="#" onClick={() => chromeApi.openShortcuts()}>
-                      <Keyboard /> {getMessage("closeTabShortcut")}
-                    </a>
-                  </Button>
-                </Box>
+                {staticRender.closeTab.button}
               </form>
             </Drawer.Body>
 
-            <Drawer.Footer>
+            <Drawer.Footer pb={2} shadow="0 -10px 10px 0 var(--shadow-color)" shadowColor="bg.panel" zIndex={1}>
               <Button
                 size="2xs"
                 variant="ghost"
