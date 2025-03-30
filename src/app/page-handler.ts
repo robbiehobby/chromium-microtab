@@ -5,111 +5,87 @@ import {
   SliderValueChangeDetails,
   SwitchCheckedChangeDetails,
 } from "@chakra-ui/react";
-import { PageState } from "./page.tsx";
-import { defaultSettings, useChrome } from "../hooks/chrome.ts";
+import chromeApi, { defaultSettings } from "../apis/chrome.ts";
 import getMessage from "../i18n.ts";
 
-export default function pageHandler() {}
+type Action = { type: string; details: any; dispatch?: (action: Action) => void };
+type Dispatch = (action: Action) => void;
 
-pageHandler.save = (settings: typeof defaultSettings, state: PageState) => {
-  state.setSettings(settings);
-  useChrome().saveSettings(settings);
+const handler: { [key: string]: Function } = {};
+
+handler.loadSettings = (state: State, details: Settings) => {
+  state.settings = { ...details };
 };
 
-pageHandler.color = (details: ColorPickerValueChangeDetails, state: PageState) => {
-  const settings = { ...state.settings };
-  settings.color = details.value.toString("rgba");
-  pageHandler.save(settings, state);
+handler.setColor = (state: State, details: ColorPickerValueChangeDetails) => {
+  state.settings.color = details.value.toString("rgba");
 };
 
-pageHandler.image = (details: FileUploadFileChangeDetails, state: PageState) => {
-  const { errors } = state;
+handler.setImage = (state: State, details: FileUploadFileChangeDetails, dispatch: Dispatch) => {
   if (details.rejectedFiles.length) {
-    state.setErrors({ ...errors, image: getMessage("imageError") });
+    state.errors.image = getMessage("imageError");
     return;
   }
-  if (errors.image) state.setErrors({ ...errors, image: undefined });
-
+  if (state.errors.image) delete state.errors.image;
   if (!details.acceptedFiles.length) {
-    const settings = { ...state.settings };
-    settings.image.filename = "";
-    settings.image.data = "";
-    pageHandler.save(settings, state);
-    return;
+    state.settings.image.filename = "";
+    state.settings.image.data = "";
+  } else {
+    const file = details.acceptedFiles[0];
+    const reader = new FileReader();
+    reader.onloadend = () => dispatch({ type: "setImageData", details: { file, reader } });
+    reader.readAsDataURL(file);
   }
-
-  const file = details.acceptedFiles[0];
-  const reader = new FileReader();
-  reader.onloadend = () => {
-    const settings = { ...state.settings };
-    settings.image.filename = file.name;
-    settings.image.data = String(reader.result);
-    pageHandler.save(settings, state);
-  };
-  reader.readAsDataURL(file);
 };
 
-pageHandler.imageRemove = (state: PageState) => {
-  const settings = { ...state.settings };
-  settings.image = structuredClone(defaultSettings.image);
-  pageHandler.save(settings, state);
+handler.setImageData = (state: State, details: { file: File; reader: FileReader }) => {
+  state.settings.image.filename = details.file.name;
+  state.settings.image.data = String(details.reader.result);
 };
 
-pageHandler.imageStyle = (details: SegmentGroupValueChangeDetails, state: PageState) => {
-  const settings = { ...state.settings };
-  settings.image.style = String(details.value);
-  pageHandler.save(settings, state);
+handler.removeImage = (state: State) => {
+  state.settings.image = { ...defaultSettings.image };
 };
 
-pageHandler.imageSize = (details: SliderValueChangeDetails, state: PageState) => {
-  const settings = { ...state.settings };
-  settings.image.size = Number(details.value[0]);
-  pageHandler.save(settings, state);
+handler.setImageStyle = (state: State, details: SegmentGroupValueChangeDetails) => {
+  state.settings.image.style = String(details.value) as ImageStyle;
 };
 
-pageHandler.imageOpacity = (details: SliderValueChangeDetails, state: PageState) => {
-  const settings = { ...state.settings };
-  settings.image.opacity = Number(details.value[0]);
-  pageHandler.save(settings, state);
+handler.setImageSize = (state: State, details: SliderValueChangeDetails) => {
+  state.settings.image.size = Number(details.value[0]);
 };
 
-pageHandler.imageHue = (details: SliderValueChangeDetails, state: PageState) => {
-  const settings = { ...state.settings };
-  settings.image.hue = Number(details.value[0]);
-  pageHandler.save(settings, state);
+handler.setImageOpacity = (state: State, details: SliderValueChangeDetails) => {
+  state.settings.image.opacity = Number(details.value[0]);
 };
 
-pageHandler.imageGrayscale = (details: SliderValueChangeDetails, state: PageState) => {
-  const settings = { ...state.settings };
-  settings.image.grayscale = Number(details.value[0] / 100);
-  pageHandler.save(settings, state);
+handler.setImageHue = (state: State, details: SliderValueChangeDetails) => {
+  state.settings.image.hue = Number(details.value[0]);
 };
 
-pageHandler.imageBlur = (details: SliderValueChangeDetails, state: PageState) => {
-  const settings = { ...state.settings };
-  settings.image.blur = Number(details.value[0]);
-  pageHandler.save(settings, state);
+handler.setImageGrayscale = (state: State, details: SliderValueChangeDetails) => {
+  state.settings.image.grayscale = Number(details.value[0] / 100);
 };
 
-pageHandler.closeTabPinned = (details: SwitchCheckedChangeDetails, state: PageState) => {
-  const settings = { ...state.settings };
-  settings.closeTab.pinned = details.checked;
-  pageHandler.save(settings, state);
+handler.setImageBlur = (state: State, details: SliderValueChangeDetails) => {
+  state.settings.image.blur = Number(details.value[0]);
 };
 
-pageHandler.closeTabGrouped = (details: SwitchCheckedChangeDetails, state: PageState) => {
-  const settings = { ...state.settings };
-  settings.closeTab.grouped = details.checked;
-  pageHandler.save(settings, state);
+handler.setCloseTabPinned = (state: State, details: SwitchCheckedChangeDetails) => {
+  state.settings.closeTab.pinned = details.checked;
 };
 
-pageHandler.reset = (state: PageState) => {
-  if (!window.confirm(getMessage("resetConfirm"))) return;
-
-  document
-    .querySelectorAll("button[data-clear]")
-    .forEach((btn) => btn.dispatchEvent(new MouseEvent("click", { bubbles: true })));
-
-  pageHandler.save(structuredClone(defaultSettings), state);
-  useChrome().resetSettings();
+handler.setCloseTabGrouped = (state: State, details: SwitchCheckedChangeDetails) => {
+  state.settings.closeTab.grouped = details.checked;
 };
+
+handler.reset = (state: State) => {
+  state.settings = { ...defaultSettings };
+};
+
+export default function pageReducer(prevState: State, action: Action) {
+  const state = { ...prevState };
+  if (handler[action.type]) handler[action.type](state, action.details, action.dispatch);
+  chromeApi.saveSettings(state.settings);
+  return state;
+}

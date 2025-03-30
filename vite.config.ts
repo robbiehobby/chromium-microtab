@@ -20,7 +20,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "./index.html",
-        chrome: "./src/hooks/chrome.ts",
+        chrome: "./src/apis/chrome.ts",
         background: "./src/app/background.ts",
       },
       output: {

@@ -1,29 +1,20 @@
 import { Box, Button, CloseButton, Drawer, Field, Group, HStack, parseColor, Span, Text } from "@chakra-ui/react";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings, TriangleAlert } from "lucide-react";
-import { defaultSettings, useChrome } from "../hooks/chrome.ts";
 import Form from "../components/form/bundle.ts";
-import pageHandler from "./page-handler.ts";
 import getMessage from "../i18n.ts";
 import Ui from "../components/ui/bundle.ts";
-
-export interface PageState {
-  settings: typeof defaultSettings;
-  setSettings: SetStateAction<any>;
-  errors: Record<any, any>;
-  setErrors: SetStateAction<any>;
-}
+import chromeApi, { defaultSettings } from "../apis/chrome.ts";
+import pageReducer from "./page-handler.ts";
 
 export default function Page() {
-  const [settings, setSettings] = useState(defaultSettings);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const state: PageState = { settings, setSettings, errors, setErrors };
+  const [state, dispatch] = useReducer(pageReducer, { settings: { ...defaultSettings }, errors: {} });
+  const { settings, errors } = state;
 
   useEffect(() => {
-    useChrome()
-      .getSettings()
-      .then((settings) => setSettings(settings));
-    return () => {};
+    (async () => {
+      dispatch({ type: "loadSettings", details: await chromeApi.getSettings(), dispatch });
+    })();
   }, []);
 
   const overlay = useRef<HTMLDivElement>(null);
@@ -39,6 +30,10 @@ export default function Page() {
   if (settings.image.hue) filters.push(`hue-rotate(${settings.image.hue}deg)`);
   if (settings.image.grayscale) filters.push(`grayscale(${settings.image.grayscale})`);
   if (settings.image.blur) filters.push(`blur(${settings.image.blur}px)`);
+
+  const onChange = (type: string, details: any) => {
+    dispatch({ type, details, dispatch });
+  };
 
   return (
     <>
@@ -90,7 +85,7 @@ export default function Page() {
                   displayLabel={getMessage("color")}
                   mb={4}
                   value={settings.color ? parseColor(settings.color) : parseColor("#000")}
-                  onValueChange={(details) => pageHandler.color(details, state)}
+                  onValueChange={(details) => onChange("setColor", details)}
                 />
 
                 <Field.Root invalid={!!errors.image} mb={4}>
@@ -100,8 +95,8 @@ export default function Page() {
                     accept="image/*"
                     maxFileSize={8000000}
                     defaultValue={settings.image.filename}
-                    onFileChange={(details) => pageHandler.image(details, state)}
-                    onFileRemove={() => pageHandler.imageRemove(state)}
+                    onFileChange={(details) => onChange("setImage", details)}
+                    onFileRemove={() => onChange("removeImage", {})}
                   />
                   {errors.image && <Field.ErrorText>{errors.image}</Field.ErrorText>}
                 </Field.Root>
@@ -136,7 +131,7 @@ export default function Page() {
                       size="sm"
                       mb="4"
                       value={settings.image.style}
-                      onValueChange={(details) => pageHandler.imageStyle(details, state)}
+                      onValueChange={(details) => onChange("setImageStyle", details)}
                     />
 
                     <Box css={{ mb: 3, px: 3, pt: 2.5 }} border="subtle" rounded="sm">
@@ -159,7 +154,7 @@ export default function Page() {
                         min={0}
                         max={200}
                         value={[settings.image.size]}
-                        onValueChange={(details) => pageHandler.imageSize(details, state)}
+                        onValueChange={(details) => onChange("setImageSize", details)}
                         disabled={settings.image.style === "cover"}
                       />
                       <Form.Slider
@@ -174,7 +169,7 @@ export default function Page() {
                         min={0}
                         max={100}
                         value={[settings.image.opacity]}
-                        onValueChange={(details) => pageHandler.imageOpacity(details, state)}
+                        onValueChange={(details) => onChange("setImageOpacity", details)}
                       />
                       <Form.Slider
                         displayLabel={
@@ -188,7 +183,7 @@ export default function Page() {
                         min={0}
                         max={360}
                         value={[settings.image.hue]}
-                        onValueChange={(details) => pageHandler.imageHue(details, state)}
+                        onValueChange={(details) => onChange("setImageHue", details)}
                       />
                       <Form.Slider
                         displayLabel={
@@ -203,7 +198,7 @@ export default function Page() {
                         min={0}
                         max={100}
                         value={[settings.image.grayscale * 100]}
-                        onValueChange={(details) => pageHandler.imageGrayscale(details, state)}
+                        onValueChange={(details) => onChange("setImageGrayscale", details)}
                       />
                       <Form.Slider
                         displayLabel={
@@ -217,7 +212,7 @@ export default function Page() {
                         min={0}
                         max={100}
                         value={[settings.image.blur]}
-                        onValueChange={(details) => pageHandler.imageBlur(details, state)}
+                        onValueChange={(details) => onChange("setImageBlur", details)}
                       />
                     </Box>
                   </>
@@ -234,7 +229,7 @@ export default function Page() {
                       displayLabel={getMessage("closeTabPinned")}
                       flexGrow={1}
                       checked={settings.closeTab.pinned}
-                      onCheckedChange={(details) => pageHandler.closeTabPinned(details, state)}
+                      onCheckedChange={(details) => onChange("setCloseTabPinned", details)}
                     />
                   </Group>
 
@@ -244,12 +239,12 @@ export default function Page() {
                       displayLabel={getMessage("closeTabGrouped")}
                       flexGrow={1}
                       checked={settings.closeTab.grouped}
-                      onCheckedChange={(details) => pageHandler.closeTabGrouped(details, state)}
+                      onCheckedChange={(details) => onChange("setCloseTabGrouped", details)}
                     />
                   </Group>
 
                   <Button asChild size="sm" variant="outline" w="full">
-                    <a href="#" onClick={() => useChrome().openShortcuts()}>
+                    <a href="#" onClick={() => chromeApi.openShortcuts()}>
                       <Keyboard /> {getMessage("closeTabShortcut")}
                     </a>
                   </Button>
@@ -258,7 +253,12 @@ export default function Page() {
             </Drawer.Body>
 
             <Drawer.Footer>
-              <Button size="2xs" variant="ghost" colorPalette="gray" onClick={() => pageHandler.reset(state)}>
+              <Button
+                size="2xs"
+                variant="ghost"
+                colorPalette="gray"
+                onClick={() => window.confirm(getMessage("resetConfirm")) && onChange("reset", {})}
+              >
                 <Span color="fg.warning">
                   <TriangleAlert size={8} />
                 </Span>
