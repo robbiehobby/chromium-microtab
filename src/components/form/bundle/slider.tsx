@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { memo, ReactNode } from "react";
 import { HStack, Slider } from "@chakra-ui/react";
 
 interface SliderProps extends Slider.RootProps {
@@ -6,7 +6,7 @@ interface SliderProps extends Slider.RootProps {
   unit: string;
 }
 
-export default function FormSlider(props: SliderProps) {
+const FormSlider = (props: SliderProps) => {
   const { displayLabel, unit, ...restProps } = props;
 
   let marks: any[] = [];
@@ -36,4 +36,9 @@ export default function FormSlider(props: SliderProps) {
       </Slider.Control>
     </Slider.Root>
   );
-}
+};
+
+export default memo(FormSlider, (prevProps, nextProps) => {
+  if (prevProps.value && nextProps.value) return prevProps.value[0] === nextProps.value[0];
+  return false;
+});
