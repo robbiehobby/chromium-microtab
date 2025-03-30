@@ -85,6 +85,23 @@ export default function Page() {
     dispatch({ type, details, dispatch });
   };
 
+  const ResetButton = memo(
+    () => (
+      <Button
+        size="2xs"
+        variant="ghost"
+        colorPalette="gray"
+        onClick={() => window.confirm(getMessage("resetConfirm")) && onChange("reset", {})}
+      >
+        <Span color="fg.warning">
+          <TriangleAlert size={8} />
+        </Span>
+        {getMessage("reset")}
+      </Button>
+    ),
+    () => true,
+  );
+
   const overlay = useRef<HTMLDivElement>(null);
 
   if (settings.color) document.body.style.backgroundColor = settings.color;
@@ -296,17 +313,7 @@ export default function Page() {
             </Drawer.Body>
 
             <Drawer.Footer pb={2} shadow="0 -10px 10px 0 var(--shadow-color)" shadowColor="bg.panel" zIndex={1}>
-              <Button
-                size="2xs"
-                variant="ghost"
-                colorPalette="gray"
-                onClick={() => window.confirm(getMessage("resetConfirm")) && onChange("reset", {})}
-              >
-                <Span color="fg.warning">
-                  <TriangleAlert size={8} />
-                </Span>
-                {getMessage("reset")}
-              </Button>
+              <ResetButton />
             </Drawer.Footer>
           </Drawer.Content>
         </Drawer.Positioner>
