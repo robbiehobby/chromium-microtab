@@ -1,4 +1,4 @@
-import { Box, Button, CloseButton, Drawer, Field, HStack, Span, Text } from "@chakra-ui/react";
+import { Box, Button, CloseButton, Drawer, HStack, Span, Text } from "@chakra-ui/react";
 import { useEffect, useReducer, useRef } from "react";
 import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings, TriangleAlert } from "lucide-react";
 import Form from "../components/form/bundle.ts";
@@ -87,19 +87,17 @@ export default function Page() {
                   hex={settings.color || undefined}
                   onValueChange={(details) => onChange("setColor", details)}
                 />
-
-                <Field.Root invalid={!!errors.image} mb={4}>
-                  <Form.FileUpload
-                    displayLabel={getMessage("image")}
-                    removeLabel={getMessage("imageRemove")}
-                    accept="image/*"
-                    maxFileSize={8000000}
-                    defaultValue={settings.image.filename}
-                    onFileChange={(details) => onChange("setImage", details)}
-                    onFileRemove={() => onChange("removeImage", {})}
-                  />
-                  {errors.image && <Field.ErrorText>{errors.image}</Field.ErrorText>}
-                </Field.Root>
+                <Form.FileUpload
+                  displayLabel={getMessage("image")}
+                  accept="image/*"
+                  maxFileSize={8000000}
+                  filename={settings.image.filename}
+                  onFileReject={(details) => onChange("setImageError", details)}
+                  onFileAccept={(details) => onChange("setImage", details)}
+                  error={errors.image}
+                  removeLabel={getMessage("imageRemove")}
+                  onFileRemove={() => onChange("removeImage", {})}
+                />
 
                 {settings.image.data && (
                   <>
@@ -229,7 +227,6 @@ export default function Page() {
                     checked={settings.closeTab.pinned}
                     onCheckedChange={(details) => onChange("setCloseTabPinned", details)}
                   />
-
                   <Form.Switch
                     displayLabel={getMessage("closeTabGrouped")}
                     tooltip={getMessage("closeTabGroupedHelp")}

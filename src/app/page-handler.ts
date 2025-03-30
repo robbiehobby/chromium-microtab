@@ -1,6 +1,6 @@
 import {
   ColorPickerValueChangeDetails,
-  FileUploadFileChangeDetails,
+  FileUploadFileAcceptDetails,
   SegmentGroupValueChangeDetails,
   SliderValueChangeDetails,
   SwitchCheckedChangeDetails,
@@ -21,24 +21,20 @@ handler.setColor = (state: State, details: ColorPickerValueChangeDetails) => {
   state.settings.color = details.value.toString("rgba");
 };
 
-handler.setImage = (state: State, details: FileUploadFileChangeDetails, dispatch: Dispatch) => {
-  if (details.rejectedFiles.length) {
-    state.errors.image = getMessage("imageError");
-    return;
-  }
-  if (state.errors.image) delete state.errors.image;
-  if (!details.acceptedFiles.length) {
-    state.settings.image.filename = "";
-    state.settings.image.data = "";
-  } else {
-    const file = details.acceptedFiles[0];
-    const reader = new FileReader();
-    reader.onloadend = () => dispatch({ type: "setImageData", details: { file, reader } });
-    reader.readAsDataURL(file);
-  }
+handler.setImageError = (state: State) => {
+  state.errors.image = getMessage("imageError");
+};
+
+handler.setImage = (_state: State, details: FileUploadFileAcceptDetails, dispatch: Dispatch) => {
+  if (!details.files.length) return;
+  const file = details.files[0];
+  const reader = new FileReader();
+  reader.onloadend = () => dispatch({ type: "setImageData", details: { file, reader } });
+  reader.readAsDataURL(file);
 };
 
 handler.setImageData = (state: State, details: { file: File; reader: FileReader }) => {
+  if (state.errors.image) delete state.errors.image;
   state.settings.image.filename = details.file.name;
   state.settings.image.data = String(details.reader.result);
 };
