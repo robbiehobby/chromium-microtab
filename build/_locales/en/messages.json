@@ -14,8 +14,11 @@
   "close": {
     "message": "Close"
   },
-  "color": {
-    "message": "Background Color"
+  "colorLight": {
+    "message": "Light Background Color"
+  },
+  "colorDark": {
+    "message": "Dark Background Color"
   },
   "image": {
     "message": "Choose Backround Image"

@@ -1,14 +1,14 @@
 import { memo, ReactNode } from "react";
 import { ColorPicker, Portal, VisuallyHidden, InputGroup, Stack, HStack, parseColor } from "@chakra-ui/react";
-import { Palette } from "lucide-react";
 
 interface ColorPickerProps extends ColorPicker.RootProps {
   displayLabel: string | ReactNode;
-  hex?: string;
+  icon: ReactNode;
+  hex: string;
 }
 
 const FormColorPicker = (props: ColorPickerProps) => {
-  const { displayLabel, hex, ...restProps } = props;
+  const { displayLabel, icon, hex, ...restProps } = props;
 
   if (hex) restProps.value = parseColor(hex);
 
@@ -21,7 +21,7 @@ const FormColorPicker = (props: ColorPickerProps) => {
       <ColorPicker.Control>
         <InputGroup
           w="full"
-          startElement={<Palette size={16} />}
+          startElement={icon}
           endElementProps={{ px: 1 }}
           endElement={
             <ColorPicker.Trigger border={0} outlineWidth={2} outlineOffset={-9} rounded="full">

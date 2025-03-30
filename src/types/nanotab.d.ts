@@ -1,7 +1,10 @@
 type ImageStyle = "cover" | "repeat" | "center";
 
 interface Settings {
-  color: string | null;
+  color: {
+    light: string;
+    dark: string;
+  };
   image: {
     filename: string;
     data: string;

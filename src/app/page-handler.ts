@@ -17,8 +17,12 @@ handler.loadSettings = (state: State, details: Settings) => {
   state.settings = { ...details };
 };
 
-handler.setColor = (state: State, details: ColorPickerValueChangeDetails) => {
-  state.settings.color = details.value.toString("rgba");
+handler.setLightColor = (state: State, details: ColorPickerValueChangeDetails) => {
+  state.settings.color.light = details.value.toString("rgba");
+};
+
+handler.setDarkColor = (state: State, details: ColorPickerValueChangeDetails) => {
+  state.settings.color.dark = details.value.toString("rgba");
 };
 
 handler.setImageError = (state: State) => {

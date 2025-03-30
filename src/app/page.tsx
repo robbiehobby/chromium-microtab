@@ -1,6 +1,6 @@
 import { memo, RefObject, useEffect, useReducer, useRef } from "react";
 import { Bleed, Box, Button, CloseButton, Drawer, HStack, Separator, Span, Text } from "@chakra-ui/react";
-import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings, TriangleAlert } from "lucide-react";
+import { Expand, Fullscreen, Keyboard, LayoutGrid, Moon, Settings, Sun, TriangleAlert } from "lucide-react";
 import chromeApi, { defaultSettings } from "../apis/chrome.ts";
 import pageReducer from "./page-handler.ts";
 import Form from "../components/form/bundle.ts";
@@ -102,19 +102,20 @@ export default function Page() {
     () => true,
   );
 
+  if (document.body.classList.contains("light")) document.body.style.backgroundColor = settings.color.light;
+  else document.body.style.backgroundColor = settings.color.dark;
+
   const overlay = useRef<HTMLDivElement>(null);
-
-  if (settings.color) document.body.style.backgroundColor = settings.color;
-  else document.body.style.backgroundColor = "";
-  if (overlay.current) {
-    if (settings.image.data) overlay.current.style.backgroundImage = `url(${settings.image.data})`;
-    else overlay.current.style.backgroundImage = "";
-  }
-
   const filters: string[] = [];
-  if (settings.image.hue) filters.push(`hue-rotate(${settings.image.hue}deg)`);
-  if (settings.image.grayscale) filters.push(`grayscale(${settings.image.grayscale})`);
-  if (settings.image.blur) filters.push(`blur(${settings.image.blur}px)`);
+
+  if (overlay.current) {
+    if (settings.image.data) {
+      overlay.current.style.backgroundImage = `url(${settings.image.data})`;
+      if (settings.image.hue) filters.push(`hue-rotate(${settings.image.hue}deg)`);
+      if (settings.image.grayscale) filters.push(`grayscale(${settings.image.grayscale})`);
+      if (settings.image.blur) filters.push(`blur(${settings.image.blur}px)`);
+    } else overlay.current.style.backgroundImage = "";
+  }
 
   return (
     <>
@@ -158,9 +159,17 @@ export default function Page() {
             <Drawer.Body pt={4} pb={6}>
               <form>
                 <Form.ColorPicker
-                  displayLabel={getMessage("color")}
-                  hex={settings.color || undefined}
-                  onValueChange={(details) => onChange("setColor", details)}
+                  displayLabel={getMessage("colorLight")}
+                  icon={<Sun size={16} strokeWidth={2.5} />}
+                  hex={settings.color.light}
+                  mb={3}
+                  onValueChange={(details) => onChange("setLightColor", details)}
+                />
+                <Form.ColorPicker
+                  displayLabel={getMessage("colorDark")}
+                  icon={<Moon size={16} />}
+                  hex={settings.color.dark}
+                  onValueChange={(details) => onChange("setDarkColor", details)}
                 />
 
                 {render.seperator.bleed}

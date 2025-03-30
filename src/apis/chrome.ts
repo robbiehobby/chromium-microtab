@@ -1,5 +1,8 @@
 export const defaultSettings: Settings = {
-  color: "#000",
+  color: {
+    light: "#fafafa",
+    dark: "#111",
+  },
   image: {
     filename: "",
     data: "",

@@ -28,7 +28,8 @@
   "options_page": "index.html",
   "permissions": [
     "tabs",
-    "storage"
+    "storage",
+    "unlimitedStorage"
   ],
   "version": "1.0"
 }
