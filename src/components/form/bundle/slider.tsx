@@ -39,6 +39,7 @@ const FormSlider = (props: SliderProps) => {
 };
 
 export default memo(FormSlider, (prevProps, nextProps) => {
+  if (prevProps.disabled !== nextProps.disabled) return false;
   if (prevProps.value && nextProps.value) return prevProps.value[0] === nextProps.value[0];
   return false;
 });
