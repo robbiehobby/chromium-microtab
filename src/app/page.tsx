@@ -1,18 +1,18 @@
+import { memo, RefObject, useEffect, useReducer, useRef } from "react";
 import { Bleed, Box, Button, CloseButton, Drawer, HStack, Separator, Span, Text } from "@chakra-ui/react";
-import { useEffect, useReducer, useRef } from "react";
 import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings, TriangleAlert } from "lucide-react";
-import Form from "../components/form/bundle.ts";
-import getMessage from "../i18n.ts";
-import Ui from "../components/ui/bundle.ts";
 import chromeApi, { defaultSettings } from "../apis/chrome.ts";
 import pageReducer from "./page-handler.ts";
+import Form from "../components/form/bundle.ts";
+import Ui from "../components/ui/bundle.ts";
+import getMessage from "../i18n.ts";
 
-const staticRender = {
-  seperator: {
-    bleed: (
-      <Bleed inline={5}>
-        <Separator size="xs" my={6} />
-      </Bleed>
+const render = {
+  drawer: {
+    title: (
+      <Text as="h2" textStyle="lg" fontWeight="semibold">
+        {getMessage("settings")}
+      </Text>
     ),
   },
   closeTab: {
@@ -29,7 +29,47 @@ const staticRender = {
       </Button>
     ),
   },
+  seperator: {
+    bleed: (
+      <Bleed inline={5}>
+        <Separator size="xs" my={6} />
+      </Bleed>
+    ),
+  },
 };
+
+type ImageBoxProps = {
+  overlay: RefObject<HTMLDivElement | null>;
+  style: string;
+  size: number;
+  opacity: number;
+  filters: string;
+};
+
+const ImageBox = memo(
+  (props: ImageBoxProps) => (
+    <Box
+      id="image"
+      ref={props.overlay}
+      position="fixed"
+      inset={0}
+      backgroundSize={props.style === "cover" ? "cover" : `${props.size}%`}
+      backgroundRepeat={props.style === "repeat" ? "repeat" : "no-repeat"}
+      backgroundPosition="center"
+      opacity={`${props.opacity}%`}
+      filter={props.filters}
+      transform="translateZ(0)"
+    />
+  ),
+  (prevProps, nextProps) => {
+    return (
+      prevProps.style === nextProps.style &&
+      prevProps.size === nextProps.size &&
+      prevProps.opacity === nextProps.opacity &&
+      prevProps.filters === nextProps.filters
+    );
+  },
+);
 
 export default function Page() {
   const [state, dispatch] = useReducer(pageReducer, { settings: structuredClone(defaultSettings), errors: {} });
@@ -61,17 +101,12 @@ export default function Page() {
 
   return (
     <>
-      <Box
-        id="image"
-        ref={overlay}
-        position="fixed"
-        inset={0}
-        backgroundSize={settings.image.style === "cover" ? "cover" : `${settings.image.size}%`}
-        backgroundRepeat={settings.image.style === "repeat" ? "repeat" : "no-repeat"}
-        backgroundPosition="center"
-        opacity={`${settings.image.opacity}%`}
-        filter={filters.join(" ")}
-        transform="translateZ(0)"
+      <ImageBox
+        overlay={overlay}
+        style={settings.image.style}
+        size={settings.image.size}
+        opacity={settings.image.opacity}
+        filters={filters.join(" ")}
       />
 
       <Drawer.Root size="sm">
@@ -100,7 +135,7 @@ export default function Page() {
               <Drawer.CloseTrigger asChild pos="initial">
                 <CloseButton size="2xs" aria-label={getMessage("close")} />
               </Drawer.CloseTrigger>
-              <Drawer.Title>{getMessage("settings")}</Drawer.Title>
+              {render.drawer.title}
             </Drawer.Header>
 
             <Drawer.Body pt={4} pb={6}>
@@ -111,7 +146,7 @@ export default function Page() {
                   onValueChange={(details) => onChange("setColor", details)}
                 />
 
-                {staticRender.seperator.bleed}
+                {render.seperator.bleed}
 
                 <Form.FileUpload
                   displayLabel={getMessage("image")}
@@ -240,8 +275,8 @@ export default function Page() {
                   </>
                 )}
 
-                {staticRender.seperator.bleed}
-                {staticRender.closeTab.text}
+                {render.seperator.bleed}
+                {render.closeTab.text}
 
                 <Form.Switch
                   displayLabel={getMessage("closeTabPinned")}
@@ -256,7 +291,7 @@ export default function Page() {
                   onCheckedChange={(details) => onChange("setCloseTabGrouped", details)}
                 />
 
-                {staticRender.closeTab.button}
+                {render.closeTab.button}
               </form>
             </Drawer.Body>
 
