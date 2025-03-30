@@ -87,5 +87,6 @@ export default function pageReducer(prevState: State, action: Action) {
   const state = { ...prevState };
   if (handler[action.type]) handler[action.type](state, action.details, action.dispatch);
   chromeApi.saveSettings(state.settings);
+  if (action.type === "reset") window.location.reload();
   return state;
 }

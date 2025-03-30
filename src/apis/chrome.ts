@@ -1,8 +1,5 @@
 export const defaultSettings: Settings = {
-  color: {
-    light: "#fafafa",
-    dark: "#111",
-  },
+  color: { light: null, dark: null },
   image: {
     filename: "",
     data: "",
@@ -32,11 +29,10 @@ chromeApi.getSettings = async () => {
 };
 
 chromeApi.saveSettings = async (settings: typeof defaultSettings) => {
+  window.localStorage.setItem("page", JSON.stringify(settings));
   try {
     await chrome.storage.local.set({ page: settings });
-  } catch (_e) {
-    window.localStorage.setItem("page", JSON.stringify(settings));
-  }
+  } catch (_e) {}
 };
 
 chromeApi.openShortcuts = () => {

@@ -102,8 +102,9 @@ export default function Page() {
     () => true,
   );
 
-  if (document.body.classList.contains("light")) document.body.style.backgroundColor = settings.color.light;
-  else document.body.style.backgroundColor = settings.color.dark;
+  if (settings.color.light && document.body.classList.contains("light"))
+    document.body.style.backgroundColor = settings.color.light;
+  else if (settings.color.dark) document.body.style.backgroundColor = settings.color.dark;
 
   const overlay = useRef<HTMLDivElement>(null);
   const filters: string[] = [];
@@ -161,14 +162,14 @@ export default function Page() {
                 <Form.ColorPicker
                   displayLabel={getMessage("colorLight")}
                   icon={<Sun size={16} strokeWidth={2.5} />}
-                  hex={settings.color.light}
+                  hex={settings.color.light || "#fafafa"}
                   mb={3}
                   onValueChange={(details) => onChange("setLightColor", details)}
                 />
                 <Form.ColorPicker
                   displayLabel={getMessage("colorDark")}
                   icon={<Moon size={16} />}
-                  hex={settings.color.dark}
+                  hex={settings.color.dark || "#111"}
                   onValueChange={(details) => onChange("setDarkColor", details)}
                 />
 
