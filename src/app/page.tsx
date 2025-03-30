@@ -1,4 +1,4 @@
-import { Box, Button, CloseButton, Drawer, Field, Group, HStack, parseColor, Span, Text } from "@chakra-ui/react";
+import { Box, Button, CloseButton, Drawer, Field, HStack, parseColor, Span, Text } from "@chakra-ui/react";
 import { useEffect, useReducer, useRef } from "react";
 import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings, TriangleAlert } from "lucide-react";
 import Form from "../components/form/bundle.ts";
@@ -17,6 +17,10 @@ export default function Page() {
     })();
   }, []);
 
+  const onChange = (type: string, details: any) => {
+    dispatch({ type, details, dispatch });
+  };
+
   const overlay = useRef<HTMLDivElement>(null);
 
   if (settings.color) document.body.style.backgroundColor = settings.color;
@@ -30,10 +34,6 @@ export default function Page() {
   if (settings.image.hue) filters.push(`hue-rotate(${settings.image.hue}deg)`);
   if (settings.image.grayscale) filters.push(`grayscale(${settings.image.grayscale})`);
   if (settings.image.blur) filters.push(`blur(${settings.image.blur}px)`);
-
-  const onChange = (type: string, details: any) => {
-    dispatch({ type, details, dispatch });
-  };
 
   return (
     <>
@@ -223,25 +223,19 @@ export default function Page() {
                     {getMessage("closeTab")}
                   </Text>
 
-                  <Group display="flex" mb={3}>
-                    <Ui.Tooltip.Info content={getMessage("closeTabPinnedHelp")} />
-                    <Form.Switch
-                      displayLabel={getMessage("closeTabPinned")}
-                      flexGrow={1}
-                      checked={settings.closeTab.pinned}
-                      onCheckedChange={(details) => onChange("setCloseTabPinned", details)}
-                    />
-                  </Group>
+                  <Form.Switch
+                    displayLabel={getMessage("closeTabPinned")}
+                    tooltip={getMessage("closeTabPinnedHelp")}
+                    checked={settings.closeTab.pinned}
+                    onCheckedChange={(details) => onChange("setCloseTabPinned", details)}
+                  />
 
-                  <Group display="flex" mb={5}>
-                    <Ui.Tooltip.Info content={getMessage("closeTabGroupedHelp")} />
-                    <Form.Switch
-                      displayLabel={getMessage("closeTabGrouped")}
-                      flexGrow={1}
-                      checked={settings.closeTab.grouped}
-                      onCheckedChange={(details) => onChange("setCloseTabGrouped", details)}
-                    />
-                  </Group>
+                  <Form.Switch
+                    displayLabel={getMessage("closeTabGrouped")}
+                    tooltip={getMessage("closeTabGroupedHelp")}
+                    checked={settings.closeTab.grouped}
+                    onCheckedChange={(details) => onChange("setCloseTabGrouped", details)}
+                  />
 
                   <Button asChild size="sm" variant="outline" w="full">
                     <a href="#" onClick={() => chromeApi.openShortcuts()}>
