@@ -1,4 +1,4 @@
-import { Box, Button, CloseButton, Drawer, Field, HStack, parseColor, Span, Text } from "@chakra-ui/react";
+import { Box, Button, CloseButton, Drawer, Field, HStack, Span, Text } from "@chakra-ui/react";
 import { useEffect, useReducer, useRef } from "react";
 import { Expand, Fullscreen, Keyboard, LayoutGrid, Settings, TriangleAlert } from "lucide-react";
 import Form from "../components/form/bundle.ts";
@@ -84,7 +84,7 @@ export default function Page() {
                 <Form.ColorPicker
                   displayLabel={getMessage("color")}
                   mb={4}
-                  value={settings.color ? parseColor(settings.color) : parseColor("#000")}
+                  hex={settings.color || undefined}
                   onValueChange={(details) => onChange("setColor", details)}
                 />
 
