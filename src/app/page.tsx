@@ -55,11 +55,13 @@ const Image = memo(
         inset={0}
         opacity={`${settings.image.opacity}%`}
         filter={filters.join(" ")}
-        transform="translateZ(0)"
         backgroundImage={`url(${url})`}
         backgroundSize={settings.image.style === "cover" ? "cover" : `${settings.image.size}%`}
         backgroundRepeat={settings.image.style === "repeat" ? "repeat" : "no-repeat"}
         backgroundPosition="center"
+        transform="translateZ(0)"
+        willChange="transform"
+        backfaceVisibility="hidden"
       />
     );
   },
@@ -80,10 +82,10 @@ export default function Page() {
     })();
   }, []);
 
-  if (settings.color.light && document.body.classList.contains("light")) {
-    document.body.style.backgroundColor = settings.color.light;
-  } else if (settings.color.dark) {
-    document.body.style.backgroundColor = settings.color.dark;
+  if (document.body.classList.contains("light")) {
+    document.body.style.backgroundColor = settings.color.light || "";
+  } else {
+    document.body.style.backgroundColor = settings.color.dark || "";
   }
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -106,10 +108,10 @@ export default function Page() {
       <Button
         size="2xs"
         variant="ghost"
-        colorPalette="gray"
+        colorPalette="orange"
         onClick={() => window.confirm(getMessage("resetConfirm")) && onChange("reset", {})}
       >
-        <Span color="fg.warning">
+        <Span>
           <TriangleAlert size={8} />
         </Span>
         {getMessage("reset")}
@@ -132,7 +134,7 @@ export default function Page() {
             p={3}
             rounded="full"
             opacity={0.4}
-            _hover={{ opacity: 1 }}
+            _hover={{ opacity: 1, color: { base: "blue.600", _dark: "blue.400" } }}
             _focus={{ opacity: 1 }}
             aria-label={getMessage("settings")}
           >
@@ -155,14 +157,22 @@ export default function Page() {
               <form>
                 <Form.ColorPicker
                   displayLabel={getMessage("colorLight")}
-                  icon={<Sun size={16} strokeWidth={2.5} />}
+                  icon={
+                    <Span color="orange.400">
+                      <Sun size={16} strokeWidth={2.5} />
+                    </Span>
+                  }
                   hex={settings.color.light || "#fafafa"}
                   mb={3}
                   onValueChange={(details) => onChange("setLightColor", details)}
                 />
                 <Form.ColorPicker
                   displayLabel={getMessage("colorDark")}
-                  icon={<Moon size={16} />}
+                  icon={
+                    <Span color="purple.400">
+                      <Moon size={16} />
+                    </Span>
+                  }
                   hex={settings.color.dark || "#111"}
                   onValueChange={(details) => onChange("setDarkColor", details)}
                 />
@@ -185,6 +195,8 @@ export default function Page() {
                   <>
                     <Form.SegmentGroup
                       displayLabel={getMessage("imageStyle")}
+                      size="sm"
+                      mb="4"
                       items={{
                         cover: (
                           <Ui.Tooltip.Root content={getMessage("imageStyleCoverHelp")}>
@@ -208,8 +220,6 @@ export default function Page() {
                           </Ui.Tooltip.Root>
                         ),
                       }}
-                      size="sm"
-                      mb="4"
                       value={settings.image.style}
                       onValueChange={(details) => onChange("setImageStyle", details)}
                     />

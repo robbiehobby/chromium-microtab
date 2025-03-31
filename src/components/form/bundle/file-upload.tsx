@@ -11,7 +11,7 @@ interface FileUploadProps extends FileUpload.RootProps {
 }
 
 const icon = (
-  <Span color="fg.muted">
+  <Span color="fg.info">
     <Image size={16} />
   </Span>
 );
@@ -42,6 +42,7 @@ const FormFileUpload = (props: FileUploadProps) => {
             endElement={
               <FileUpload.ClearTrigger asChild>
                 <CloseButton
+                  colorPalette="orange"
                   size="xs"
                   variant="plain"
                   focusVisibleRing="inside"
