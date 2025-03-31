@@ -1,7 +1,7 @@
 import { memo, useEffect, useReducer, useState } from "react";
 import { Bleed, Box, Button, CloseButton, Drawer, HStack, Separator, Span, Stack, Text } from "@chakra-ui/react";
 import { Expand, Fullscreen, Keyboard, LayoutGrid, Moon, Settings, Sun, TriangleAlert } from "lucide-react";
-import Color from "../../../components/Color.tsx";
+import ColorPicker from "../../../components/ColorPicker.tsx";
 import FileUpload from "../../../components/FileUpload.tsx";
 import SegmentGroup from "../../../components/SegmentGroup.tsx";
 import Slider from "../../../components/Slider.tsx";
@@ -159,7 +159,7 @@ export default function Page() {
 
             <Drawer.Body pt={4} pb={6}>
               <Stack as="form" gap={3}>
-                <Color
+                <ColorPicker
                   fieldLabel={chromeApi.getMessage("colorLight")}
                   icon={
                     <Span color="orange.400">
@@ -169,7 +169,7 @@ export default function Page() {
                   hex={settings.color.light || "#fafafa"}
                   onValueChange={(details) => onChange("setLightColor", details)}
                 />
-                <Color
+                <ColorPicker
                   fieldLabel={chromeApi.getMessage("colorDark")}
                   icon={
                     <Span color="purple.400">
