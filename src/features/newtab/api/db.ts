@@ -1,6 +1,6 @@
 import { openDB } from "idb";
 
-const promise = openDB("nanotab", 1, {
+const promise = openDB("microtab", 1, {
   upgrade(db) {
     db.createObjectStore("key_value");
   },
