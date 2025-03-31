@@ -1,4 +1,4 @@
-import { defaultSettings } from "../apis/chrome.ts";
+import { defaultSettings } from "../api/chrome.ts";
 
 chrome.commands.onCommand.addListener(async (command: string) => {
   if (command !== "close-tab") return;

@@ -1,3 +1,4 @@
+import messagesJson from "../../../locales/en/messages.json";
 import db from "./db.ts";
 
 export const defaultSettings: Settings = {
@@ -13,12 +14,24 @@ export const defaultSettings: Settings = {
   closeTab: { pinned: true, grouped: true },
 };
 
+const messages = messagesJson as {
+  [key: string]: { message: string };
+};
+
 export default function chromeApi() {}
+
+chromeApi.getMessage = (key: string, substitutions?: string | string[]): string => {
+  try {
+    return chrome.i18n.getMessage(key, substitutions);
+  } catch (_error) {
+    return messages[key].message || "";
+  }
+};
 
 chromeApi.getSettings = async () => {
   const fallbackSettings = structuredClone(defaultSettings);
   let settings = await db.get("settings");
-  if (!Object.keys(settings).length) {
+  if (!settings || !Object.keys(settings).length) {
     try {
       settings = (await chrome.storage.local.get(["page"])).page || fallbackSettings;
     } catch (_error) {

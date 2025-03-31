@@ -1,15 +1,15 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ChakraProvider, Theme, LocaleProvider } from "@chakra-ui/react";
-import App from "./app/page.tsx";
-import system from "./theme.ts";
+import themeSystem from "./theme.ts";
+import Page from "../features/newtab/components/page.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ChakraProvider value={system}>
+    <ChakraProvider value={themeSystem}>
       <Theme colorPalette="blue" bg="bg.subtle">
         <LocaleProvider locale={Intl.DateTimeFormat().resolvedOptions().locale}>
-          <App />
+          <Page />
         </LocaleProvider>
       </Theme>
     </ChakraProvider>

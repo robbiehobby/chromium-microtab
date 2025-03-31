@@ -1,9 +1,17 @@
 import { memo } from "react";
-import { CloseButton, Field, FileUpload, Input, InputGroup, Span, VisuallyHidden } from "@chakra-ui/react";
+import {
+  CloseButton,
+  Field,
+  FileUpload as ChakraFileUpload,
+  Input,
+  InputGroup,
+  Span,
+  VisuallyHidden,
+} from "@chakra-ui/react";
 import { Image } from "lucide-react";
 
-interface FileUploadProps extends FileUpload.RootProps {
-  displayLabel: string;
+interface FileUploadProps extends ChakraFileUpload.RootProps {
+  fieldLabel: string;
   file?: File;
   error?: string;
   removeLabel: string;
@@ -11,27 +19,27 @@ interface FileUploadProps extends FileUpload.RootProps {
 }
 
 const icon = (
-  <Span color="fg.info">
+  <Span color="subtle">
     <Image size={16} />
   </Span>
 );
 
-const FormFileUpload = (props: FileUploadProps) => {
-  const { displayLabel, file, error, removeLabel, onFileRemove, ...restProps } = props;
+const FileUpload = (props: FileUploadProps) => {
+  const { fieldLabel, file, error, removeLabel, onFileRemove, ...restProps } = props;
 
   return (
-    <Field.Root invalid={!!error} mb={4}>
-      <FileUpload.Root gap={3} {...restProps}>
-        <VisuallyHidden>
-          <FileUpload.Label>{displayLabel}</FileUpload.Label>
+    <Field.Root invalid={!!error}>
+      <ChakraFileUpload.Root gap={3} {...restProps}>
+        <VisuallyHidden asChild>
+          <ChakraFileUpload.Label>{fieldLabel}</ChakraFileUpload.Label>
         </VisuallyHidden>
 
         {!file && (
           <InputGroup startElement={icon}>
             <Input asChild>
-              <FileUpload.Trigger>
-                <FileUpload.FileText fallback={displayLabel} lineClamp={1} />
-              </FileUpload.Trigger>
+              <ChakraFileUpload.Trigger>
+                <ChakraFileUpload.FileText fallback={fieldLabel} lineClamp={1} />
+              </ChakraFileUpload.Trigger>
             </Input>
           </InputGroup>
         )}
@@ -40,9 +48,9 @@ const FormFileUpload = (props: FileUploadProps) => {
           <InputGroup
             startElement={icon}
             endElement={
-              <FileUpload.ClearTrigger asChild>
+              <ChakraFileUpload.ClearTrigger asChild>
                 <CloseButton
-                  colorPalette="orange"
+                  colorPalette="red"
                   size="xs"
                   variant="plain"
                   focusVisibleRing="inside"
@@ -51,7 +59,7 @@ const FormFileUpload = (props: FileUploadProps) => {
                   onClick={() => onFileRemove()}
                   data-clear
                 />
-              </FileUpload.ClearTrigger>
+              </ChakraFileUpload.ClearTrigger>
             }
             endElementProps={{ px: 1 }}
           >
@@ -61,15 +69,15 @@ const FormFileUpload = (props: FileUploadProps) => {
           </InputGroup>
         )}
 
-        <FileUpload.HiddenInput />
-      </FileUpload.Root>
+        <ChakraFileUpload.HiddenInput />
+      </ChakraFileUpload.Root>
 
       {error && <Field.ErrorText>{error}</Field.ErrorText>}
     </Field.Root>
   );
 };
 
-export default memo(FormFileUpload, (prevProps, nextProps) => {
+export default memo(FileUpload, (prevProps, nextProps) => {
   if (prevProps.error !== nextProps.error) return false;
   return prevProps.file?.name === nextProps.file?.name;
 });

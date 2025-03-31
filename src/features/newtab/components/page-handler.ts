@@ -5,8 +5,7 @@ import {
   SliderValueChangeDetails,
   SwitchCheckedChangeDetails,
 } from "@chakra-ui/react";
-import chromeApi, { defaultSettings } from "../apis/chrome.ts";
-import getMessage from "../i18n.ts";
+import chromeApi, { defaultSettings } from "../api/chrome.ts";
 
 type Action = { type: string; details: any; dispatch?: (action: Action) => void };
 
@@ -25,7 +24,7 @@ handler.setDarkColor = (state: State, details: ColorPickerValueChangeDetails) =>
 };
 
 handler.setImageError = (state: State) => {
-  state.errors.image = getMessage("imageError");
+  state.errors.image = chromeApi.getMessage("imageError");
 };
 
 handler.setImage = (state: State, details: FileUploadFileAcceptDetails) => {

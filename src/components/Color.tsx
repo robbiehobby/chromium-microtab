@@ -1,21 +1,21 @@
 import { memo, ReactNode } from "react";
 import { ColorPicker, Portal, VisuallyHidden, InputGroup, Stack, HStack, parseColor } from "@chakra-ui/react";
 
-interface ColorPickerProps extends ColorPicker.RootProps {
-  displayLabel: string | ReactNode;
+interface ColorProps extends ColorPicker.RootProps {
+  fieldLabel: string | ReactNode;
   icon: ReactNode;
   hex: string;
 }
 
-const FormColorPicker = (props: ColorPickerProps) => {
-  const { displayLabel, icon, hex, ...restProps } = props;
+const Color = (props: ColorProps) => {
+  const { fieldLabel, icon, hex, ...restProps } = props;
 
   if (hex) restProps.value = parseColor(hex);
 
   return (
     <ColorPicker.Root format="hsla" gap={4} {...restProps}>
-      <VisuallyHidden>
-        <ColorPicker.Label>{displayLabel}</ColorPicker.Label>
+      <VisuallyHidden asChild>
+        <ColorPicker.Label>{fieldLabel}</ColorPicker.Label>
       </VisuallyHidden>
 
       <ColorPicker.Control>
@@ -52,6 +52,6 @@ const FormColorPicker = (props: ColorPickerProps) => {
   );
 };
 
-export default memo(FormColorPicker, (prevProps, nextProps) => {
+export default memo(Color, (prevProps, nextProps) => {
   return prevProps.hex === nextProps.hex;
 });

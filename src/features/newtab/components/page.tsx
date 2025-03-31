@@ -1,30 +1,33 @@
 import { memo, useEffect, useReducer, useState } from "react";
-import { Bleed, Box, Button, CloseButton, Drawer, HStack, Separator, Span, Text } from "@chakra-ui/react";
+import { Bleed, Box, Button, CloseButton, Drawer, HStack, Separator, Span, Stack, Text } from "@chakra-ui/react";
 import { Expand, Fullscreen, Keyboard, LayoutGrid, Moon, Settings, Sun, TriangleAlert } from "lucide-react";
-import chromeApi, { defaultSettings } from "../apis/chrome.ts";
+import Color from "../../../components/Color.tsx";
+import FileUpload from "../../../components/FileUpload.tsx";
+import SegmentGroup from "../../../components/SegmentGroup.tsx";
+import Slider from "../../../components/Slider.tsx";
+import Switch from "../../../components/Switch.tsx";
+import Tooltip from "../../../components/Tooltip.tsx";
+import chromeApi, { defaultSettings } from "../api/chrome.ts";
 import pageReducer from "./page-handler.ts";
-import Form from "../components/form/bundle.ts";
-import Ui from "../components/ui/bundle.ts";
-import getMessage from "../i18n.ts";
 
 const render = {
   drawer: {
     title: (
       <Text as="h2" textStyle="lg" fontWeight="semibold">
-        {getMessage("settings")}
+        {chromeApi.getMessage("settings")}
       </Text>
     ),
   },
   closeTab: {
     text: (
-      <Text mb={5} fontSize="sm">
-        {getMessage("closeTab")}
+      <Text mb={3} fontSize="sm">
+        {chromeApi.getMessage("closeTab")}
       </Text>
     ),
     button: (
       <Button asChild size="sm" variant="outline" w="full" mt={4}>
         <a href="#" onClick={() => chromeApi.openShortcuts()}>
-          <Keyboard /> {getMessage("closeTabShortcut")}
+          <Keyboard /> {chromeApi.getMessage("closeTabShortcut")}
         </a>
       </Button>
     ),
@@ -32,7 +35,7 @@ const render = {
   seperator: {
     bleed: (
       <Bleed inline={5}>
-        <Separator size="xs" my={6} />
+        <Separator size="xs" my={2} />
       </Bleed>
     ),
   },
@@ -109,12 +112,12 @@ export default function Page() {
         size="2xs"
         variant="ghost"
         colorPalette="orange"
-        onClick={() => window.confirm(getMessage("resetConfirm")) && onChange("reset", {})}
+        onClick={() => window.confirm(chromeApi.getMessage("resetConfirm")) && onChange("reset", {})}
       >
         <Span>
           <TriangleAlert size={8} />
         </Span>
-        {getMessage("reset")}
+        {chromeApi.getMessage("reset")}
       </Button>
     ),
     () => true,
@@ -134,9 +137,10 @@ export default function Page() {
             p={3}
             rounded="full"
             opacity={0.4}
-            _hover={{ opacity: 1, color: { base: "blue.600", _dark: "blue.400" } }}
+            _hover={{ opacity: 1, color: "focus" }}
             _focus={{ opacity: 1 }}
-            aria-label={getMessage("settings")}
+            _focusVisible={{ outlineColor: "focus", color: "focus" }}
+            aria-label={chromeApi.getMessage("settings")}
           >
             <Span _groupHover={{ animation: "spin 1.5s infinite" }}>
               <Settings />
@@ -148,26 +152,25 @@ export default function Page() {
           <Drawer.Content overflowX="hidden">
             <Drawer.Header pb={2} shadow="0 10px 10px 0 var(--shadow-color)" shadowColor="bg.panel" zIndex={1}>
               <Drawer.CloseTrigger asChild pos="initial">
-                <CloseButton size="2xs" aria-label={getMessage("close")} />
+                <CloseButton size="2xs" aria-label={chromeApi.getMessage("close")} />
               </Drawer.CloseTrigger>
               {render.drawer.title}
             </Drawer.Header>
 
             <Drawer.Body pt={4} pb={6}>
-              <form>
-                <Form.ColorPicker
-                  displayLabel={getMessage("colorLight")}
+              <Stack as="form" gap={3}>
+                <Color
+                  fieldLabel={chromeApi.getMessage("colorLight")}
                   icon={
                     <Span color="orange.400">
                       <Sun size={16} strokeWidth={2.5} />
                     </Span>
                   }
                   hex={settings.color.light || "#fafafa"}
-                  mb={3}
                   onValueChange={(details) => onChange("setLightColor", details)}
                 />
-                <Form.ColorPicker
-                  displayLabel={getMessage("colorDark")}
+                <Color
+                  fieldLabel={chromeApi.getMessage("colorDark")}
                   icon={
                     <Span color="purple.400">
                       <Moon size={16} />
@@ -179,57 +182,57 @@ export default function Page() {
 
                 {render.seperator.bleed}
 
-                <Form.FileUpload
-                  displayLabel={getMessage("image")}
+                <FileUpload
+                  fieldLabel={chromeApi.getMessage("image")}
                   accept="image/*"
                   maxFileSize={8000000}
                   file={settings.image.blob}
                   onFileReject={(details) => onChange("setImageError", details)}
                   onFileAccept={(details) => onChange("setImage", details)}
                   error={errors.image}
-                  removeLabel={getMessage("imageRemove")}
+                  removeLabel={chromeApi.getMessage("imageRemove")}
                   onFileRemove={() => onChange("removeImage", {})}
                 />
 
                 {settings.image.blob && (
                   <>
-                    <Form.SegmentGroup
-                      displayLabel={getMessage("imageStyle")}
+                    <SegmentGroup
+                      fieldLabel={chromeApi.getMessage("imageStyle")}
                       size="sm"
-                      mb={4}
+                      mb={3}
                       items={{
                         cover: (
-                          <Ui.Tooltip.Root content={getMessage("imageStyleCoverHelp")}>
+                          <Tooltip.Root content={chromeApi.getMessage("imageStyleCoverHelp")}>
                             <HStack>
-                              <Expand size={13} /> {getMessage("imageStyleCover")}
+                              <Expand size={13} /> {chromeApi.getMessage("imageStyleCover")}
                             </HStack>
-                          </Ui.Tooltip.Root>
+                          </Tooltip.Root>
                         ),
                         repeat: (
-                          <Ui.Tooltip.Root content={getMessage("imageStyleRepeatHelp")}>
+                          <Tooltip.Root content={chromeApi.getMessage("imageStyleRepeatHelp")}>
                             <HStack>
-                              <LayoutGrid size={13} /> {getMessage("imageStyleRepeat")}
+                              <LayoutGrid size={13} /> {chromeApi.getMessage("imageStyleRepeat")}
                             </HStack>
-                          </Ui.Tooltip.Root>
+                          </Tooltip.Root>
                         ),
                         center: (
-                          <Ui.Tooltip.Root content={getMessage("imageStyleCenterHelp")}>
+                          <Tooltip.Root content={chromeApi.getMessage("imageStyleCenterHelp")}>
                             <HStack>
-                              <Fullscreen size={13} /> {getMessage("imageStyleCenter")}
+                              <Fullscreen size={13} /> {chromeApi.getMessage("imageStyleCenter")}
                             </HStack>
-                          </Ui.Tooltip.Root>
+                          </Tooltip.Root>
                         ),
                       }}
                       value={settings.image.style}
                       onValueChange={(details) => onChange("setImageStyle", details)}
                     />
 
-                    <Form.Slider
-                      displayLabel={getMessage("imageSize")}
+                    <Slider
+                      fieldLabel={chromeApi.getMessage("imageSize")}
                       tooltip={
                         settings.image.style === "cover"
-                          ? getMessage("imageSizeDisabledHelp")
-                          : getMessage("imageSizeHelp")
+                          ? chromeApi.getMessage("imageSizeDisabledHelp")
+                          : chromeApi.getMessage("imageSizeHelp")
                       }
                       size="sm"
                       unit="%"
@@ -240,9 +243,9 @@ export default function Page() {
                       onValueChange={(details) => onChange("setImageSize", details)}
                       disabled={settings.image.style === "cover"}
                     />
-                    <Form.Slider
-                      displayLabel={getMessage("imageOpacity")}
-                      tooltip={getMessage("imageOpacityHelp")}
+                    <Slider
+                      fieldLabel={chromeApi.getMessage("imageOpacity")}
+                      tooltip={chromeApi.getMessage("imageOpacityHelp")}
                       size="sm"
                       unit="%"
                       step={0.5}
@@ -251,9 +254,9 @@ export default function Page() {
                       value={[settings.image.opacity]}
                       onValueChange={(details) => onChange("setImageOpacity", details)}
                     />
-                    <Form.Slider
-                      displayLabel={getMessage("imageHue")}
-                      tooltip={getMessage("imageHueHelp")}
+                    <Slider
+                      fieldLabel={chromeApi.getMessage("imageHue")}
+                      tooltip={chromeApi.getMessage("imageHueHelp")}
                       size="sm"
                       unit="deg"
                       step={0.5}
@@ -262,9 +265,9 @@ export default function Page() {
                       value={[settings.image.hue]}
                       onValueChange={(details) => onChange("setImageHue", details)}
                     />
-                    <Form.Slider
-                      displayLabel={getMessage("imageGrayscale")}
-                      tooltip={getMessage("imageGrayscaleHelp")}
+                    <Slider
+                      fieldLabel={chromeApi.getMessage("imageGrayscale")}
+                      tooltip={chromeApi.getMessage("imageGrayscaleHelp")}
                       size="sm"
                       unit="%"
                       step={0.5}
@@ -273,9 +276,9 @@ export default function Page() {
                       value={[settings.image.grayscale * 100]}
                       onValueChange={(details) => onChange("setImageGrayscale", details)}
                     />
-                    <Form.Slider
-                      displayLabel={getMessage("imageBlur")}
-                      tooltip={getMessage("imageBlurHelp")}
+                    <Slider
+                      fieldLabel={chromeApi.getMessage("imageBlur")}
+                      tooltip={chromeApi.getMessage("imageBlurHelp")}
                       size="sm"
                       unit="%"
                       step={0.5}
@@ -290,24 +293,24 @@ export default function Page() {
                 {render.seperator.bleed}
                 {render.closeTab.text}
 
-                <Form.Switch
-                  displayLabel={getMessage("closeTabPinned")}
-                  tooltip={getMessage("closeTabPinnedHelp")}
+                <Switch
+                  fieldLabel={chromeApi.getMessage("closeTabPinned")}
+                  tooltip={chromeApi.getMessage("closeTabPinnedHelp")}
                   checked={settings.closeTab.pinned}
                   onCheckedChange={(details) => onChange("setCloseTabPinned", details)}
                 />
-                <Form.Switch
-                  displayLabel={getMessage("closeTabGrouped")}
-                  tooltip={getMessage("closeTabGroupedHelp")}
+                <Switch
+                  fieldLabel={chromeApi.getMessage("closeTabGrouped")}
+                  tooltip={chromeApi.getMessage("closeTabGroupedHelp")}
                   checked={settings.closeTab.grouped}
                   onCheckedChange={(details) => onChange("setCloseTabGrouped", details)}
                 />
 
                 {render.closeTab.button}
-              </form>
+              </Stack>
             </Drawer.Body>
 
-            <Drawer.Footer pb={2} shadow="0 -10px 10px 0 var(--shadow-color)" shadowColor="bg.panel" zIndex={1}>
+            <Drawer.Footer py={3} shadow="0 -10px 10px 0 var(--shadow-color)" shadowColor="bg.panel" zIndex={1}>
               <ResetButton />
             </Drawer.Footer>
           </Drawer.Content>
