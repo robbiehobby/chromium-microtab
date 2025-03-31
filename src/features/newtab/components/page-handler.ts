@@ -1,6 +1,7 @@
 import {
   ColorPickerValueChangeDetails,
   FileUploadFileAcceptDetails,
+  FileUploadFileRejectDetails,
   SegmentGroupValueChangeDetails,
   SliderValueChangeDetails,
   SwitchCheckedChangeDetails,
@@ -23,13 +24,14 @@ handler.setDarkColor = (state: State, details: ColorPickerValueChangeDetails) =>
   state.settings.color.dark = details.value.toString("rgba");
 };
 
-handler.setImageError = (state: State) => {
+handler.setImageError = (state: State, details: FileUploadFileRejectDetails) => {
+  if (!details.files.length) return;
   state.errors.image = chromeApi.getMessage("imageError");
 };
 
 handler.setImage = (state: State, details: FileUploadFileAcceptDetails) => {
-  if (!details.files.length) return;
   if (state.errors.image) delete state.errors.image;
+  if (!details.files.length) return;
   const file = details.files[0];
   state.settings.image.blob = file;
 };
