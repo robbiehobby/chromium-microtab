@@ -1,4 +1,4 @@
-import { memo, RefObject, useEffect, useReducer, useRef } from "react";
+import { memo, useEffect, useReducer, useState } from "react";
 import { Bleed, Box, Button, CloseButton, Drawer, HStack, Separator, Span, Text } from "@chakra-ui/react";
 import { Expand, Fullscreen, Keyboard, LayoutGrid, Moon, Settings, Sun, TriangleAlert } from "lucide-react";
 import chromeApi, { defaultSettings } from "../apis/chrome.ts";
@@ -38,36 +38,35 @@ const render = {
   },
 };
 
-type ImageBoxProps = {
-  overlay: RefObject<HTMLDivElement | null>;
-  style: string;
-  size: number;
-  opacity: number;
-  filters: string;
-};
+const Image = memo(
+  (props: { url: string | null; settings: Settings }) => {
+    if (!props.url) return null;
+    const { url, settings } = props;
 
-const ImageBox = memo(
-  (props: ImageBoxProps) => (
-    <Box
-      id="image"
-      ref={props.overlay}
-      position="fixed"
-      inset={0}
-      backgroundSize={props.style === "cover" ? "cover" : `${props.size}%`}
-      backgroundRepeat={props.style === "repeat" ? "repeat" : "no-repeat"}
-      backgroundPosition="center"
-      opacity={`${props.opacity}%`}
-      filter={props.filters}
-      transform="translateZ(0)"
-    />
-  ),
-  (prevProps, nextProps) => {
+    const filters: string[] = [];
+    if (settings.image.hue) filters.push(`hue-rotate(${settings.image.hue}deg)`);
+    if (settings.image.grayscale) filters.push(`grayscale(${settings.image.grayscale})`);
+    if (settings.image.blur) filters.push(`blur(${settings.image.blur}px)`);
+
     return (
-      prevProps.style === nextProps.style &&
-      prevProps.size === nextProps.size &&
-      prevProps.opacity === nextProps.opacity &&
-      prevProps.filters === nextProps.filters
+      <Box
+        id="image"
+        position="fixed"
+        inset={0}
+        opacity={`${settings.image.opacity}%`}
+        filter={filters.join(" ")}
+        transform="translateZ(0)"
+        backgroundImage={`url(${url})`}
+        backgroundSize={settings.image.style === "cover" ? "cover" : `${settings.image.size}%`}
+        backgroundRepeat={settings.image.style === "repeat" ? "repeat" : "no-repeat"}
+        backgroundPosition="center"
+      />
     );
+  },
+  (prevProps, nextProps) => {
+    const { blob: prevBlob, ...prevImage } = prevProps.settings.image;
+    const { blob: nextBlob, ...nextImage } = nextProps.settings.image;
+    return prevProps.url === nextProps.url && JSON.stringify(prevImage) === JSON.stringify(nextImage);
   },
 );
 
@@ -80,6 +79,23 @@ export default function Page() {
       dispatch({ type: "loadSettings", details: await chromeApi.getSettings(), dispatch });
     })();
   }, []);
+
+  if (settings.color.light && document.body.classList.contains("light")) {
+    document.body.style.backgroundColor = settings.color.light;
+  } else if (settings.color.dark) {
+    document.body.style.backgroundColor = settings.color.dark;
+  }
+
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    let url: string = "";
+    if (settings.image.blob) {
+      url = URL.createObjectURL(new Blob([settings.image.blob], { type: settings.image.blob.type }));
+    }
+    setImageUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [settings.image.blob]);
 
   const onChange = (type: string, details: any) => {
     dispatch({ type, details, dispatch });
@@ -102,31 +118,9 @@ export default function Page() {
     () => true,
   );
 
-  if (settings.color.light && document.body.classList.contains("light"))
-    document.body.style.backgroundColor = settings.color.light;
-  else if (settings.color.dark) document.body.style.backgroundColor = settings.color.dark;
-
-  const overlay = useRef<HTMLDivElement>(null);
-  const filters: string[] = [];
-
-  if (overlay.current) {
-    if (settings.image.data) {
-      overlay.current.style.backgroundImage = `url(${settings.image.data})`;
-      if (settings.image.hue) filters.push(`hue-rotate(${settings.image.hue}deg)`);
-      if (settings.image.grayscale) filters.push(`grayscale(${settings.image.grayscale})`);
-      if (settings.image.blur) filters.push(`blur(${settings.image.blur}px)`);
-    } else overlay.current.style.backgroundImage = "";
-  }
-
   return (
     <>
-      <ImageBox
-        overlay={overlay}
-        style={settings.image.style}
-        size={settings.image.size}
-        opacity={settings.image.opacity}
-        filters={filters.join(" ")}
-      />
+      <Image url={imageUrl} settings={structuredClone(settings)} />
 
       <Drawer.Root size="sm">
         <Drawer.Trigger asChild position="fixed" right={10} bottom={10}>
@@ -179,7 +173,7 @@ export default function Page() {
                   displayLabel={getMessage("image")}
                   accept="image/*"
                   maxFileSize={8000000}
-                  filename={settings.image.filename}
+                  file={settings.image.blob}
                   onFileReject={(details) => onChange("setImageError", details)}
                   onFileAccept={(details) => onChange("setImage", details)}
                   error={errors.image}
@@ -187,7 +181,7 @@ export default function Page() {
                   onFileRemove={() => onChange("removeImage", {})}
                 />
 
-                {settings.image.data && (
+                {settings.image.blob && (
                   <>
                     <Form.SegmentGroup
                       displayLabel={getMessage("imageStyle")}

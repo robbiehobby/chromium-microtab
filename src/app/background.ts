@@ -7,7 +7,7 @@ chrome.commands.onCommand.addListener(async (command: string) => {
   if (!window.tabs || window.tabs.length === 0) return;
   const tab = window.tabs.find((tab) => tab.active);
   if (!tab || !tab.id) return;
-  const settings: typeof defaultSettings = (await chrome.storage.local.get(["page"])).page || defaultSettings;
+  const settings: Settings = (await chrome.storage.local.get(["page"])).page || defaultSettings;
 
   // Check which close tab protections are enabled.
   const { pinned, grouped } = settings.closeTab;

@@ -1,11 +1,9 @@
 (function () {
-  const color = { light: "#fafafa", dark: "#111" };
+  let color = { light: "#fafafa", dark: "#111" };
 
   const getSettings = () => {
     try {
-      const settings = JSON.parse(window.localStorage.getItem("page") || "");
-      if (settings.color.light) color.light = settings.color.light;
-      if (settings.color.dark) color.dark = settings.color.dark;
+      color = JSON.parse(window.localStorage.getItem("page-color") || "");
     } catch (_e) {}
   };
   getSettings();

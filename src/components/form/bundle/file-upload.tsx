@@ -4,7 +4,7 @@ import { Image } from "lucide-react";
 
 interface FileUploadProps extends FileUpload.RootProps {
   displayLabel: string;
-  filename: string;
+  file?: File;
   error?: string;
   removeLabel: string;
   onFileRemove: Function;
@@ -17,7 +17,7 @@ const icon = (
 );
 
 const FormFileUpload = (props: FileUploadProps) => {
-  const { displayLabel, filename, error, removeLabel, onFileRemove, ...restProps } = props;
+  const { displayLabel, file, error, removeLabel, onFileRemove, ...restProps } = props;
 
   return (
     <Field.Root invalid={!!error} mb={4}>
@@ -26,7 +26,7 @@ const FormFileUpload = (props: FileUploadProps) => {
           <FileUpload.Label>{displayLabel}</FileUpload.Label>
         </VisuallyHidden>
 
-        {!filename && (
+        {!file && (
           <InputGroup startElement={icon}>
             <Input asChild>
               <FileUpload.Trigger>
@@ -36,7 +36,7 @@ const FormFileUpload = (props: FileUploadProps) => {
           </InputGroup>
         )}
 
-        {filename && (
+        {file && (
           <InputGroup
             startElement={icon}
             endElement={
@@ -55,7 +55,7 @@ const FormFileUpload = (props: FileUploadProps) => {
             endElementProps={{ px: 1 }}
           >
             <Input asChild>
-              <input value={filename} readOnly={true} />
+              <input value={file.name} readOnly={true} />
             </Input>
           </InputGroup>
         )}
@@ -70,5 +70,5 @@ const FormFileUpload = (props: FileUploadProps) => {
 
 export default memo(FormFileUpload, (prevProps, nextProps) => {
   if (prevProps.error !== nextProps.error) return false;
-  return prevProps.filename === nextProps.filename;
+  return prevProps.file?.name === nextProps.file?.name;
 });

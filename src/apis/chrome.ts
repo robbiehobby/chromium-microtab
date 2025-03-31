@@ -1,8 +1,8 @@
+import db from "./db.ts";
+
 export const defaultSettings: Settings = {
   color: { light: null, dark: null },
   image: {
-    filename: "",
-    data: "",
     style: "cover",
     size: 100,
     opacity: 100,
@@ -16,23 +16,25 @@ export const defaultSettings: Settings = {
 export default function chromeApi() {}
 
 chromeApi.getSettings = async () => {
-  const settings = structuredClone(defaultSettings);
-  try {
-    return (await chrome.storage.local.get(["page"])).page || settings;
-  } catch (_e) {
+  const fallbackSettings = structuredClone(defaultSettings);
+  let settings = await db.get("settings");
+  if (!Object.keys(settings).length) {
     try {
-      return JSON.parse(window.localStorage.getItem("page") || "");
+      settings = (await chrome.storage.local.get(["page"])).page || fallbackSettings;
     } catch (_e) {
-      return settings;
+      settings = fallbackSettings;
     }
   }
+  return settings;
 };
 
-chromeApi.saveSettings = async (settings: typeof defaultSettings) => {
-  window.localStorage.setItem("page", JSON.stringify(settings));
+chromeApi.saveSettings = async (settings: Settings, reset = false) => {
+  await db.set("settings", settings);
+  window.localStorage.setItem("page-color", JSON.stringify(settings.color));
   try {
     await chrome.storage.local.set({ page: settings });
   } catch (_e) {}
+  if (reset) window.location.reload();
 };
 
 chromeApi.openShortcuts = () => {

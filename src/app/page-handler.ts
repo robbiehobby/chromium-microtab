@@ -9,11 +9,10 @@ import chromeApi, { defaultSettings } from "../apis/chrome.ts";
 import getMessage from "../i18n.ts";
 
 type Action = { type: string; details: any; dispatch?: (action: Action) => void };
-type Dispatch = (action: Action) => void;
 
 const handler: { [key: string]: Function } = {};
 
-handler.loadSettings = (state: State, details: Settings) => {
+handler.loadSettings = async (state: State, details: Settings) => {
   state.settings = { ...details };
 };
 
@@ -29,18 +28,11 @@ handler.setImageError = (state: State) => {
   state.errors.image = getMessage("imageError");
 };
 
-handler.setImage = (_state: State, details: FileUploadFileAcceptDetails, dispatch: Dispatch) => {
+handler.setImage = (state: State, details: FileUploadFileAcceptDetails) => {
   if (!details.files.length) return;
-  const file = details.files[0];
-  const reader = new FileReader();
-  reader.onloadend = () => dispatch({ type: "setImageData", details: { file, reader } });
-  reader.readAsDataURL(file);
-};
-
-handler.setImageData = (state: State, details: { file: File; reader: FileReader }) => {
   if (state.errors.image) delete state.errors.image;
-  state.settings.image.filename = details.file.name;
-  state.settings.image.data = String(details.reader.result);
+  const file = details.files[0];
+  state.settings.image.blob = file;
 };
 
 handler.removeImage = (state: State) => {
@@ -85,8 +77,7 @@ handler.reset = (state: State) => {
 
 export default function pageReducer(prevState: State, action: Action) {
   const state = { ...prevState };
-  if (handler[action.type]) handler[action.type](state, action.details, action.dispatch);
-  chromeApi.saveSettings(state.settings);
-  if (action.type === "reset") window.location.reload();
+  if (handler[action.type]) handler[action.type](state, action.details);
+  chromeApi.saveSettings(state.settings, action.type === "reset");
   return state;
 }
