@@ -4,7 +4,7 @@
   const getSettings = () => {
     try {
       color = JSON.parse(window.localStorage.getItem("page-color") || "");
-    } catch (_e) {}
+    } catch (_error) {}
   };
   getSettings();
 

@@ -23,5 +23,5 @@ chrome.commands.onCommand.addListener(async (command: string) => {
       await chrome.tabs.create({});
     }
     await chrome.tabs.remove(tab.id);
-  } catch (_e) {}
+  } catch (_error) {}
 });

@@ -21,7 +21,7 @@ chromeApi.getSettings = async () => {
   if (!Object.keys(settings).length) {
     try {
       settings = (await chrome.storage.local.get(["page"])).page || fallbackSettings;
-    } catch (_e) {
+    } catch (_error) {
       settings = fallbackSettings;
     }
   }
@@ -33,12 +33,12 @@ chromeApi.saveSettings = async (settings: Settings, reset = false) => {
   window.localStorage.setItem("page-color", JSON.stringify(settings.color));
   try {
     await chrome.storage.local.set({ page: settings });
-  } catch (_e) {}
+  } catch (_error) {}
   if (reset) window.location.reload();
 };
 
 chromeApi.openShortcuts = () => {
   try {
     chrome.tabs.create({ url: "chrome://extensions/shortcuts" });
-  } catch (_e) {}
+  } catch (_error) {}
 };
