@@ -13,7 +13,7 @@ const FormColorPicker = (props: ColorPickerProps) => {
   if (hex) restProps.value = parseColor(hex);
 
   return (
-    <ColorPicker.Root format="hsla" gap="4" {...restProps}>
+    <ColorPicker.Root format="hsla" gap={4} {...restProps}>
       <VisuallyHidden>
         <ColorPicker.Label>{displayLabel}</ColorPicker.Label>
       </VisuallyHidden>

@@ -196,7 +196,7 @@ export default function Page() {
                     <Form.SegmentGroup
                       displayLabel={getMessage("imageStyle")}
                       size="sm"
-                      mb="4"
+                      mb={4}
                       items={{
                         cover: (
                           <Ui.Tooltip.Root content={getMessage("imageStyleCoverHelp")}>

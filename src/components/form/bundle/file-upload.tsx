@@ -21,7 +21,7 @@ const FormFileUpload = (props: FileUploadProps) => {
 
   return (
     <Field.Root invalid={!!error} mb={4}>
-      <FileUpload.Root gap="3" {...restProps}>
+      <FileUpload.Root gap={3} {...restProps}>
         <VisuallyHidden>
           <FileUpload.Label>{displayLabel}</FileUpload.Label>
         </VisuallyHidden>
