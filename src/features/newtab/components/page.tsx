@@ -18,16 +18,16 @@ const render = {
       </Text>
     ),
   },
-  closeTab: {
+  close: {
     text: (
       <Text mb={3} fontSize="sm">
-        {chromeApi.getMessage("closeTab")}
+        {chromeApi.getMessage("closeDescription")}
       </Text>
     ),
     button: (
       <Button asChild size="sm" variant="outline" w="full" mt={4}>
         <a href="#" onClick={() => chromeApi.openShortcuts()}>
-          <Keyboard /> {chromeApi.getMessage("closeTabShortcut")}
+          <Keyboard /> {chromeApi.getMessage("closeShortcut")}
         </a>
       </Button>
     ),
@@ -291,22 +291,22 @@ export default function Page() {
                 )}
 
                 {render.seperator.bleed}
-                {render.closeTab.text}
+                {render.close.text}
 
                 <Switch
-                  fieldLabel={chromeApi.getMessage("closeTabPinned")}
-                  tooltip={chromeApi.getMessage("closeTabPinnedHelp")}
-                  checked={settings.closeTab.pinned}
-                  onCheckedChange={(details) => onChange("setCloseTabPinned", details)}
+                  fieldLabel={chromeApi.getMessage("closePinned")}
+                  tooltip={chromeApi.getMessage("closePinnedHelp")}
+                  checked={settings.close.pinned}
+                  onCheckedChange={(details) => onChange("setClosePinned", details)}
                 />
                 <Switch
-                  fieldLabel={chromeApi.getMessage("closeTabGrouped")}
-                  tooltip={chromeApi.getMessage("closeTabGroupedHelp")}
-                  checked={settings.closeTab.grouped}
-                  onCheckedChange={(details) => onChange("setCloseTabGrouped", details)}
+                  fieldLabel={chromeApi.getMessage("closeGrouped")}
+                  tooltip={chromeApi.getMessage("closeGroupedHelp")}
+                  checked={settings.close.grouped}
+                  onCheckedChange={(details) => onChange("setCloseGrouped", details)}
                 />
 
-                {render.closeTab.button}
+                {render.close.button}
               </Stack>
             </Drawer.Body>
 

@@ -64,12 +64,12 @@ handler.setImageBlur = (state: State, details: SliderValueChangeDetails) => {
   state.settings.image.blur = Number(details.value[0]);
 };
 
-handler.setCloseTabPinned = (state: State, details: SwitchCheckedChangeDetails) => {
-  state.settings.closeTab.pinned = details.checked;
+handler.setClosePinned = (state: State, details: SwitchCheckedChangeDetails) => {
+  state.settings.close.pinned = details.checked;
 };
 
-handler.setCloseTabGrouped = (state: State, details: SwitchCheckedChangeDetails) => {
-  state.settings.closeTab.grouped = details.checked;
+handler.setCloseGrouped = (state: State, details: SwitchCheckedChangeDetails) => {
+  state.settings.close.grouped = details.checked;
 };
 
 handler.reset = (state: State) => {

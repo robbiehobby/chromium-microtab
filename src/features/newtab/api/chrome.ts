@@ -11,7 +11,7 @@ export const defaultSettings: Settings = {
     grayscale: 0,
     blur: 0,
   },
-  closeTab: { pinned: true, grouped: true },
+  close: { pinned: true, grouped: true },
 };
 
 const messages = messagesJson as {

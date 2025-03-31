@@ -11,8 +11,8 @@
     "newtab": "index.html"
   },
   "commands": {
-    "close-tab": {
-      "description": "__MSG_commandName__"
+    "close": {
+      "description": "__MSG_closeCommand__"
     }
   },
   "content_security_policy": {

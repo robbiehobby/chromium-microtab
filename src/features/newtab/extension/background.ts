@@ -1,7 +1,7 @@
 import { defaultSettings } from "../api/chrome.ts";
 
 chrome.commands.onCommand.addListener(async (command: string) => {
-  if (command !== "close-tab") return;
+  if (command !== "close") return;
 
   const window = await chrome.windows.getCurrent({ populate: true });
   if (!window.tabs || window.tabs.length === 0) return;
@@ -10,7 +10,7 @@ chrome.commands.onCommand.addListener(async (command: string) => {
   const settings: Settings = (await chrome.storage.local.get(["page"])).page || defaultSettings;
 
   // Check which close tab protections are enabled.
-  const { pinned, grouped } = settings.closeTab;
+  const { pinned, grouped } = settings.close;
   if ((pinned && tab.pinned) || (grouped && tab.groupId !== -1)) return;
 
   try {

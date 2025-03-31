@@ -5,8 +5,8 @@
   "description": {
     "message": "Chromium extension designed to customize the empty new tab page."
   },
-  "commandName": {
-    "message": "Close Tab"
+  "closeCommand": {
+    "message": "Close the current tab"
   },
   "settings": {
     "message": "Settings"
@@ -83,22 +83,22 @@
   "imageBlurHelp": {
     "message": "Adjust the blur level of the background image."
   },
-  "closeTab": {
+  "closeDescription": {
     "message": "Tired of accidentally closing tabs or the browser window when closing the last tab? Configure the alternative Close Tab shortcut to avoid this frustration."
   },
-  "closeTabPinned": {
+  "closePinned": {
     "message": "Prevent closing pinned tabs"
   },
-  "closeTabPinnedHelp": {
+  "closePinnedHelp": {
     "message": "When this option is enabled, pinned tabs will not be closed when using the keyboard shortcut to close tabs."
   },
-  "closeTabGrouped": {
+  "closeGrouped": {
     "message": "Prevent closing tabs within groups"
   },
-  "closeTabGroupedHelp": {
+  "closeGroupedHelp": {
     "message": "When this option is enabled, grouped tabs will not be closed when using the keyboard shortcut to close tabs."
   },
-  "closeTabShortcut": {
+  "closeShortcut": {
     "message": "Configure Keyboard Shortcuts"
   },
   "reset": {
