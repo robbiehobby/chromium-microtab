@@ -225,17 +225,11 @@ export default function Page() {
                     />
 
                     <Form.Slider
-                      displayLabel={
-                        <HStack>
-                          <Ui.Tooltip.Info
-                            content={
-                              settings.image.style === "cover"
-                                ? getMessage("imageSizeDisabledHelp")
-                                : getMessage("imageSizeHelp")
-                            }
-                          />
-                          {getMessage("imageSize")}
-                        </HStack>
+                      displayLabel={getMessage("imageSize")}
+                      tooltip={
+                        settings.image.style === "cover"
+                          ? getMessage("imageSizeDisabledHelp")
+                          : getMessage("imageSizeHelp")
                       }
                       size="sm"
                       unit="%"
@@ -247,11 +241,8 @@ export default function Page() {
                       disabled={settings.image.style === "cover"}
                     />
                     <Form.Slider
-                      displayLabel={
-                        <HStack>
-                          <Ui.Tooltip.Info content={getMessage("imageOpacityHelp")} /> {getMessage("imageOpacity")}
-                        </HStack>
-                      }
+                      displayLabel={getMessage("imageOpacity")}
+                      tooltip={getMessage("imageOpacityHelp")}
                       size="sm"
                       unit="%"
                       step={0.5}
@@ -261,11 +252,8 @@ export default function Page() {
                       onValueChange={(details) => onChange("setImageOpacity", details)}
                     />
                     <Form.Slider
-                      displayLabel={
-                        <HStack>
-                          <Ui.Tooltip.Info content={getMessage("imageHueHelp")} /> {getMessage("imageHue")}
-                        </HStack>
-                      }
+                      displayLabel={getMessage("imageHue")}
+                      tooltip={getMessage("imageHueHelp")}
                       size="sm"
                       unit="deg"
                       step={0.5}
@@ -275,12 +263,8 @@ export default function Page() {
                       onValueChange={(details) => onChange("setImageHue", details)}
                     />
                     <Form.Slider
-                      displayLabel={
-                        <HStack>
-                          <Ui.Tooltip.Info content={getMessage("imageGrayscaleHelp")} />
-                          {getMessage("imageGrayscale")}
-                        </HStack>
-                      }
+                      displayLabel={getMessage("imageGrayscale")}
+                      tooltip={getMessage("imageGrayscaleHelp")}
                       size="sm"
                       unit="%"
                       step={0.5}
@@ -290,11 +274,8 @@ export default function Page() {
                       onValueChange={(details) => onChange("setImageGrayscale", details)}
                     />
                     <Form.Slider
-                      displayLabel={
-                        <HStack>
-                          <Ui.Tooltip.Info content={getMessage("imageBlurHelp")} /> {getMessage("imageBlur")}
-                        </HStack>
-                      }
+                      displayLabel={getMessage("imageBlur")}
+                      tooltip={getMessage("imageBlurHelp")}
                       size="sm"
                       unit="%"
                       step={0.5}

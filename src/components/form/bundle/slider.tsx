@@ -1,13 +1,15 @@
 import { memo, ReactNode } from "react";
 import { HStack, Slider } from "@chakra-ui/react";
+import Ui from "../../ui/bundle.ts";
 
 interface SliderProps extends Slider.RootProps {
   displayLabel: string | ReactNode;
+  tooltip: string;
   unit: string;
 }
 
 const FormSlider = (props: SliderProps) => {
-  const { displayLabel, unit, ...restProps } = props;
+  const { displayLabel, tooltip, unit, ...restProps } = props;
 
   let marks: any[] = [];
   if (restProps.max) {
@@ -21,7 +23,11 @@ const FormSlider = (props: SliderProps) => {
   return (
     <Slider.Root gap="md" {...restProps}>
       <HStack justify="space-between">
-        <Slider.Label>{displayLabel}</Slider.Label>
+        <Slider.Label>
+          <HStack>
+            <Ui.Tooltip.Info content={tooltip} /> {displayLabel}
+          </HStack>
+        </Slider.Label>
         <HStack gap={0} color="fg.subtle">
           <Slider.ValueText /> {unit}
         </HStack>
