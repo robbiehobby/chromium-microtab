@@ -90,13 +90,19 @@
     "message": "Prevent closing pinned tabs"
   },
   "closePinnedHelp": {
-    "message": "When this option is enabled, pinned tabs will not be closed when using the keyboard shortcut to close tabs."
+    "message": "When enabled, pinned tabs will not be closed when using the keyboard shortcut to close tabs."
   },
   "closeGrouped": {
     "message": "Prevent closing tabs within groups"
   },
   "closeGroupedHelp": {
-    "message": "When this option is enabled, grouped tabs will not be closed when using the keyboard shortcut to close tabs."
+    "message": "When enabled, grouped tabs will not be closed when using the keyboard shortcut to close tabs."
+  },
+  "closeEmpty": {
+    "message": "Prevent closing empty new tabs"
+  },
+  "closeEmptyHelp": {
+    "message": "When enabled, empty new tabs will not be automatically closed when another tab is created."
   },
   "closeShortcut": {
     "message": "Configure Keyboard Shortcuts"

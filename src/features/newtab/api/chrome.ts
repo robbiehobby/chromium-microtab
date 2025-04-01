@@ -11,7 +11,7 @@ export const defaultSettings: Settings = {
     grayscale: 0,
     blur: 0,
   },
-  close: { pinned: true, grouped: true },
+  close: { pinned: true, grouped: true, empty: true },
 };
 
 const messages = messagesJson as {

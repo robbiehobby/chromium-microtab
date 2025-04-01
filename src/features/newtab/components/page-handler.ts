@@ -72,6 +72,10 @@ handler.setCloseGrouped = (state: State, details: SwitchCheckedChangeDetails) =>
   state.settings.close.grouped = details.checked;
 };
 
+handler.setCloseEmpty = (state: State, details: SwitchCheckedChangeDetails) => {
+  state.settings.close.empty = details.checked;
+};
+
 handler.reset = (state: State) => {
   state.settings = structuredClone(defaultSettings);
 };

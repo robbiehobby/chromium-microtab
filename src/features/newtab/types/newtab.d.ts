@@ -11,7 +11,7 @@ interface Settings {
     grayscale: number;
     blur: number;
   };
-  close: { pinned: boolean; grouped: boolean };
+  close: { pinned: boolean; grouped: boolean; empty: boolean };
 }
 
 type Errors = { [key: string]: string };

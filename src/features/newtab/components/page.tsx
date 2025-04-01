@@ -305,6 +305,12 @@ export default function Page() {
                   checked={settings.close.grouped}
                   onCheckedChange={(details) => onChange("setCloseGrouped", details)}
                 />
+                <Switch
+                  fieldLabel={chromeApi.getMessage("closeEmpty")}
+                  tooltip={chromeApi.getMessage("closeEmptyHelp")}
+                  checked={settings.close.empty}
+                  onCheckedChange={(details) => onChange("setCloseEmpty", details)}
+                />
 
                 {render.close.button}
               </Stack>
