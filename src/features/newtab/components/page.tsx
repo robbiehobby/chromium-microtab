@@ -316,7 +316,7 @@ export default function Page() {
               </Stack>
             </Drawer.Body>
 
-            <Drawer.Footer py={3} shadow="0 -10px 10px 0 var(--shadow-color)" shadowColor="bg.panel" zIndex={1}>
+            <Drawer.Footer pt={3} py={5} shadow="0 -10px 10px 0 var(--shadow-color)" shadowColor="bg.panel" zIndex={1}>
               <ResetButton />
             </Drawer.Footer>
           </Drawer.Content>
