@@ -1,17 +1,17 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { ChakraProvider, Theme, LocaleProvider } from "@chakra-ui/react";
-import themeSystem from "./theme.ts";
-import Page from "../features/newtab/components/page.tsx";
+import { ThemeProvider } from "next-themes";
+import { Theme } from "@radix-ui/themes";
+import Page from "../features/closetab/components/page.tsx";
+import "@radix-ui/themes/styles.css";
+import "./global.css";
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.body).render(
   <StrictMode>
-    <ChakraProvider value={themeSystem}>
-      <Theme colorPalette="blue" bg="bg.subtle">
-        <LocaleProvider locale={Intl.DateTimeFormat().resolvedOptions().locale}>
-          <Page />
-        </LocaleProvider>
+    <ThemeProvider attribute="class">
+      <Theme style={{ minHeight: "unset" }}>
+        <Page />
       </Theme>
-    </ChakraProvider>
+    </ThemeProvider>
   </StrictMode>,
 );

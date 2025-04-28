@@ -1,47 +1,21 @@
-import { Tooltip as ChakraTooltip, Portal, Span } from "@chakra-ui/react";
-import { forwardRef, ReactNode } from "react";
+import { IconButton, Tooltip, TooltipProps } from "@radix-ui/themes";
 import { Info } from "lucide-react";
 
-export interface TooltipProps extends ChakraTooltip.RootProps {
-  content: ReactNode;
-}
+export default function UiTooltip() {}
 
-export default function Tooltip() {}
+interface UiTooltipProps extends TooltipProps {}
 
-Tooltip.Root = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
-  const { children, content, ...restProps } = props;
+UiTooltip.Root = (props: UiTooltipProps) => {
+  const { children, ...restProps } = props;
+  return <Tooltip {...restProps}>{children}</Tooltip>;
+};
 
-  if (!restProps.openDelay) restProps.openDelay = 250;
-
+UiTooltip.Info = (props: UiTooltipProps) => {
   return (
-    <ChakraTooltip.Root {...restProps}>
-      <ChakraTooltip.Trigger asChild>{children}</ChakraTooltip.Trigger>
-      <Portal>
-        <ChakraTooltip.Positioner>
-          <ChakraTooltip.Content ref={ref}>
-            <ChakraTooltip.Arrow>
-              <ChakraTooltip.ArrowTip />
-            </ChakraTooltip.Arrow>
-            {content}
-          </ChakraTooltip.Content>
-        </ChakraTooltip.Positioner>
-      </Portal>
-    </ChakraTooltip.Root>
-  );
-});
-
-Tooltip.Info = (props: TooltipProps) => {
-  return (
-    <Tooltip.Root {...props}>
-      <Span
-        color="fg.subtle"
-        rounded="full"
-        outline="none"
-        _focusVisible={{ color: "colorPalette.focusRing" }}
-        tabIndex={0}
-      >
+    <Tooltip {...props}>
+      <IconButton asChild variant="ghost" color="gray" size="1" radius="full" style={{ opacity: 0.6 }} tabIndex={0}>
         <Info size={16} />
-      </Span>
-    </Tooltip.Root>
+      </IconButton>
+    </Tooltip>
   );
 };

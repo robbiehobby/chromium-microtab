@@ -1,90 +1,24 @@
 {
   "name": {
-    "message": "Microtab"
+    "message": "Tabs"
   },
   "description": {
-    "message": "Chromium extension designed to customize the empty new tab page."
+    "message": "Chrome extension to enhance the tab-closing experience."
   },
   "closeCommand": {
     "message": "Close the current tab"
   },
-  "settings": {
-    "message": "Settings"
+  "closeUnassigned": {
+    "message": "You must assign a keyboard shortcut to use these options."
   },
-  "close": {
-    "message": "Close"
+  "closeShortcut": {
+    "message": "Keyboard shortcut assigned!"
   },
-  "colorLight": {
-    "message": "Light Background Color"
+  "closeShortcutHelp": {
+    "message": "Assign a keyboard shortcut to close tabs based on the enabled options."
   },
-  "colorDark": {
-    "message": "Dark Background Color"
-  },
-  "image": {
-    "message": "Choose Backround Image"
-  },
-  "imageError": {
-    "message": "The maximum allowed image size is 8 MB."
-  },
-  "imageRemove": {
-    "message": "Remove Background Image"
-  },
-  "imageStyle": {
-    "message": "Style"
-  },
-  "imageStyleCover": {
-    "message": "Cover"
-  },
-  "imageStyleCoverHelp": {
-    "message": "Fit the background image to the size of the window."
-  },
-  "imageStyleRepeat": {
-    "message": "Repeat"
-  },
-  "imageStyleRepeatHelp": {
-    "message": "Repeat the background image across the entire window."
-  },
-  "imageStyleCenter": {
-    "message": "Center"
-  },
-  "imageStyleCenterHelp": {
-    "message": "Show the background image in the center of the window."
-  },
-  "imageSize": {
-    "message": "Size"
-  },
-  "imageSizeHelp": {
-    "message": "Adjust the size of the background image."
-  },
-  "imageSizeDisabledHelp": {
-    "message": "The background image size cannot be adjusted when using the cover style."
-  },
-  "imageOpacity": {
-    "message": "Opacity"
-  },
-  "imageOpacityHelp": {
-    "message": "Adjust the opacity of the background image."
-  },
-  "imageHue": {
-    "message": "Hue"
-  },
-  "imageHueHelp": {
-    "message": "Adjust the hue rotation of the image."
-  },
-  "imageGrayscale": {
-    "message": "Grayscale"
-  },
-  "imageGrayscaleHelp": {
-    "message": "Adjust the grayscale level of the background image."
-  },
-  "imageBlur": {
-    "message": "Blur"
-  },
-  "imageBlurHelp": {
-    "message": "Adjust the blur level of the background image."
-  },
-  "closeDescription": {
-    "message": "Tired of accidentally closing tabs or the browser window when closing the last tab? Configure the alternative Close Tab shortcut to avoid this frustration."
+  "closeConfigure": {
+    "message": "Assign"
   },
   "closePinned": {
     "message": "Prevent closing pinned tabs"
@@ -103,14 +37,5 @@
   },
   "closeEmptyHelp": {
     "message": "When enabled, empty new tabs will not be automatically closed when another tab is created."
-  },
-  "closeShortcut": {
-    "message": "Configure Keyboard Shortcuts"
-  },
-  "reset": {
-    "message": "Reset"
-  },
-  "resetConfirm": {
-    "message": "Are you sure you want to restore the default settings?"
   }
 }

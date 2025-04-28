@@ -1,38 +1,23 @@
-import { memo, ReactNode } from "react";
-import { Group, Switch as ChakraSwitch } from "@chakra-ui/react";
-import { Check, X } from "lucide-react";
-import Tooltip from "./Tooltip.tsx";
+import { Flex, Text, Switch, SwitchProps } from "@radix-ui/themes";
+import UiTooltip from "./tooltip.tsx";
 
-interface SwitchProps extends ChakraSwitch.RootProps {
-  fieldLabel: string | ReactNode;
-  tooltip: string;
+interface UiSwitchProps extends SwitchProps {
+  label: string;
+  tooltip?: string;
 }
 
-const Switch = (props: SwitchProps) => {
-  const { fieldLabel, tooltip, ...restProps } = props;
+export default function UiSwitch(props: UiSwitchProps) {
+  const { label, tooltip, ...restProps } = props;
 
   return (
-    <Group display="flex">
-      <Tooltip.Info content={tooltip} />
-
-      <ChakraSwitch.Root display="flex" justifyContent="space-between" flexGrow={1} {...restProps}>
-        <ChakraSwitch.Label>{fieldLabel}</ChakraSwitch.Label>
-
-        <ChakraSwitch.Control>
-          <ChakraSwitch.Thumb>
-            <ChakraSwitch.ThumbIndicator fallback={<X size={12} color="black" />}>
-              <Check size={12} color="black" />
-            </ChakraSwitch.ThumbIndicator>
-          </ChakraSwitch.Thumb>
-        </ChakraSwitch.Control>
-
-        <ChakraSwitch.HiddenInput />
-      </ChakraSwitch.Root>
-    </Group>
+    <Flex asChild align="center" gap="2" width="100%">
+      <Text as="label" size="2">
+        {tooltip && <UiTooltip.Info content={tooltip} />}
+        <Text weight="medium" style={{ flexGrow: 1 }}>
+          {label}
+        </Text>
+        <Switch size="2" {...restProps} />
+      </Text>
+    </Flex>
   );
-};
-
-export default memo(Switch, (prevProps, nextProps) => {
-  if (prevProps.disabled !== nextProps.disabled) return false;
-  return prevProps.checked === nextProps.checked;
-});
+}
