@@ -3,7 +3,7 @@
     "message": "Tabs"
   },
   "description": {
-    "message": "Chrome extension to enhance the tab-closing experience."
+    "message": "Adds awareness of the last tab and offers additional safeguards when closing tabs."
   },
   "closeCommand": {
     "message": "Close the current tab"

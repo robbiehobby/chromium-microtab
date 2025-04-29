@@ -1,6 +1,6 @@
 ## Chrome Tabs Extension
 
-Chrome extension to enhance the tab-closing experience.
+Adds awareness of the last tab and offers additional safeguards when closing tabs.
 
 <br>
 
