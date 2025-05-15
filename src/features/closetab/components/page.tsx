@@ -1,4 +1,4 @@
-import { Box, Button, Callout, Flex, Heading, Text } from "@radix-ui/themes";
+import { Box, Button, Callout, Flex, Text } from "@radix-ui/themes";
 import { useEffect, useReducer, useState } from "react";
 import UiSwitch from "../../../components/switch.tsx";
 import UiTooltip from "../../../components/tooltip.tsx";
@@ -22,10 +22,6 @@ export default function Page() {
 
   return (
     <Box p="5" width="400px">
-      <Heading as="h1" size="5" mt="-1" mb="3">
-        {chromeApi.getMessage("name")}
-      </Heading>
-
       <Callout.Root color={!shortcut ? "orange" : "grass"} mb="5">
         <Callout.Text>
           <Flex as="span" align="center" gap="4">

@@ -1,6 +1,6 @@
-## Chrome Tabs Extension
+## Chrome Tab Extension
 
-Adds awareness of the last tab and offers additional safeguards  when closing tabs.
+Adds awareness of the last tab and provides additional safeguards when closing tabs.
 
 <br>
 
