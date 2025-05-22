@@ -12,7 +12,7 @@
     "message": "You must assign a keyboard shortcut to use these options."
   },
   "closeShortcut": {
-    "message": "Keyboard shortcut assigned!"
+    "message": "Assigned Keyboard Shortcut"
   },
   "closeShortcutHelp": {
     "message": "Assign a keyboard shortcut to close tabs based on the enabled options."
